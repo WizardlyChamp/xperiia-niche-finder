@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Xperiia / Niche Finder Leads</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,500,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#F2EEE6; --surface:#FBF9F4; --surface-2:#FFFFFF;
+  --ink:#1A1813; --ink-2:#56514A; --ink-3:#8C857A;
+  --line:rgba(26,24,19,.14); --line-soft:rgba(26,24,19,.08);
+  --accent:#D8431D; --accent-press:#B5380F; --on-accent:#FFF8F2;
+  --money:#1E6B4F; --money-soft:rgba(30,107,79,.12);
+  --warn:#B5380F;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --pill:999px;
+  --shadow-sm:0 1px 2px rgba(26,24,19,.05);
+  --shadow-md:0 14px 36px -18px rgba(26,24,19,.30);
+  --font-display:"Clash Display","Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --font-body:"Satoshi","Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ease:cubic-bezier(.4,0,.15,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--font-body);
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  padding:max(14px,env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom));
+}
+.wrap{max-width:1040px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:18px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--ink);position:relative;flex:none}
+.logo::after{content:"";position:absolute;inset:7px;border-radius:3px;background:var(--accent)}
+.brand .muted{color:var(--ink-3)}
+button{font-family:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--pill);padding:9px 16px;font-weight:600;font-size:14px;transition:.15s var(--ease)}
+.btn:hover{background:var(--surface-2);border-color:rgba(26,24,19,.24)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-press);border-color:var(--accent-press)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn-ghost:hover{background:var(--line-soft)}
+.btn-sm{padding:6px 12px;font-size:13px}
+input{font-family:inherit;font-size:15px}
+
+/* ---------- LOGIN ---------- */
+.gate{min-height:78vh;display:flex;align-items:center;justify-content:center}
+.gate-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-md);padding:30px 26px}
+.gate-card .brand{margin-bottom:18px}
+.gate-card h1{font-family:var(--font-display);font-weight:600;font-size:24px;letter-spacing:-.01em;margin:2px 0 4px}
+.gate-card p{color:var(--ink-2);font-size:14px;margin:0 0 20px}
+.field label{display:block;font-weight:600;font-size:13px;margin-bottom:7px}
+.in{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;color:var(--ink);outline:none;transition:.15s var(--ease)}
+.in:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--line-soft)}
+.gate-card .btn-primary{width:100%;margin-top:16px;padding:12px}
+.gate-err{color:var(--warn);font-size:13px;font-weight:600;margin-top:12px;min-height:18px}
+
+/* ---------- HEADER ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:6px 0 16px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+h2.page{font-family:var(--font-display);font-weight:600;font-size:clamp(22px,5vw,30px);letter-spacing:-.015em;margin:6px 0 2px}
+.sub{color:var(--ink-2);font-size:14px;margin:0 0 18px}
+
+/* ---------- STATS ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:14px 16px}
+.stat .n{font-family:var(--font-display);font-weight:600;font-size:26px;line-height:1;letter-spacing:-.01em}
+.stat .l{color:var(--ink-3);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:8px}
+.stat.green .n{color:var(--money)}
+
+/* ---------- CONTROLS ---------- */
+.controls{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search{flex:1;min-width:200px;position:relative}
+.search input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--pill);padding:11px 16px 11px 40px;outline:none;transition:.15s var(--ease)}
+.search input:focus{border-color:var(--ink);box-shadow:0 0 0 3px var(--line-soft)}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.count-tag{color:var(--ink-3);font-size:13px;font-weight:600;white-space:nowrap}
+
+/* ---------- LEAD CARDS ---------- */
+.list{display:flex;flex-direction:column;gap:12px}
+.lead{background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--r-md);box-shadow:var(--shadow-sm);overflow:hidden}
+.lead-head{display:grid;grid-template-columns:1fr auto;gap:10px 16px;padding:16px 18px;align-items:start}
+.lead-id{min-width:0}
+.lead-name{font-family:var(--font-display);font-weight:600;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.when{color:var(--ink-3);font-size:12.5px;margin-top:3px}
+.niche-badge{display:inline-flex;align-items:center;gap:7px;background:var(--money-soft);color:var(--money);border-radius:var(--pill);padding:5px 12px;font-weight:600;font-size:13px;white-space:nowrap}
+.niche-badge b{font-family:var(--font-display)}
+.contact{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--pill);padding:6px 12px;font-size:13px;color:var(--ink);text-decoration:none;transition:.15s var(--ease)}
+a.chip:hover{border-color:var(--ink);background:var(--paper)}
+.chip svg{color:var(--ink-3);flex:none}
+.meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);background:var(--line-soft);border-radius:var(--pill);padding:5px 11px}
+.tag .k{color:var(--ink-3);font-weight:600}
+.lead-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 18px;border-top:1px solid var(--line-soft);background:rgba(26,24,19,.015)}
+.expand-btn{display:inline-flex;align-items:center;gap:7px;background:transparent;border:none;color:var(--ink-2);font-weight:600;font-size:13.5px;padding:4px 2px}
+.expand-btn .car{transition:transform .2s var(--ease)}
+.lead.open .expand-btn .car{transform:rotate(180deg)}
+.del{display:inline-flex;align-items:center;gap:6px;background:transparent;border:none;color:var(--ink-3);font-size:13px;font-weight:600;padding:4px 8px;border-radius:var(--r-sm)}
+.del:hover{color:var(--warn);background:rgba(181,56,15,.08)}
+
+.detail{display:none;padding:2px 18px 20px;border-top:1px solid var(--line-soft)}
+.lead.open .detail{display:block}
+.detail h4{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:18px 0 10px}
+.rank-row{display:flex;align-items:center;gap:12px;margin:9px 0}
+.rank-no{font-family:var(--font-display);font-weight:600;font-size:13px;color:var(--ink-3);width:18px;flex:none}
+.rank-name{font-size:14px;font-weight:500;width:215px;max-width:42vw;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-track{flex:1;height:8px;background:var(--line-soft);border-radius:var(--pill);overflow:hidden;min-width:60px}
+.rank-fill{display:block;height:100%;border-radius:var(--pill);background:linear-gradient(90deg,#2E8466,var(--money))}
+.rank-val{font-size:13px;font-weight:600;color:var(--money);width:42px;text-align:right;font-variant-numeric:tabular-nums}
+.qa{margin:9px 0}
+.qa .q{font-size:13px;color:var(--ink-3);margin-bottom:2px}
+.qa .a{font-size:14px;color:var(--ink);font-weight:500}
+
+/* ---------- STATES ---------- */
+.state{text-align:center;padding:64px 20px;color:var(--ink-2)}
+.state .big{font-family:var(--font-display);font-weight:600;font-size:20px;color:var(--ink);margin-bottom:6px}
+.spinner{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:var(--pill);font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:.25s var(--ease);z-index:50;box-shadow:var(--shadow-md)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:640px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .lead-head{grid-template-columns:1fr}
+  .niche-badge{justify-self:start}
+  .rank-name{width:auto;max-width:50vw}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================================================================
+   XPERIIA  ·  NICHE FINDER LEADS DASHBOARD
+   Reads leads through a password-protected Supabase function. The
+   function holds the privileged key; this page only sends the
+   password you type. Nothing sensitive is stored in this file.
+   ================================================================== */
+const FN_URL  = "https://nszoydpwmkslnhnsccox.supabase.co/functions/v1/niche-leads";
+/* public anon key, used only so the gateway routes the request */
+const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zem95ZHB3bWtzbG5obnNjY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczOTYyNzcsImV4cCI6MjA5Mjk3MjI3N30.q4B86xg62wlGPcMRo8EIT5i5bbD4pmbuB2x1b3Io9HU";
+
+const KEY_STORE = "xperiia_leads_key";
+const app = document.getElementById("app");
+let KEY = sessionStorage.getItem(KEY_STORE) || "";
+let LEADS = [];
+let FILTER = "";
+
+/* ---- tiny helpers ---- */
+const esc = (s)=> String(s==null?"":s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+const digits = (s)=> String(s||"").replace(/\D/g,"");
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200); }
+function fmtDate(iso){
+  const d=new Date(iso); if(isNaN(d)) return "";
+  return d.toLocaleString(undefined,{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"});
+}
+function iconSearch(){ return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>'; }
+
+/* ---- API ---- */
+async function api(payload){
+  const res = await fetch(FN_URL, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json", "apikey":ANON_KEY, "x-admin-key":payload.key },
+    body: JSON.stringify(payload)
+  });
+  let data={}; try{ data=await res.json(); }catch(e){}
+  if(res.status===401) throw new Error("unauthorized");
+  if(!res.ok) throw new Error(data.error || ("Request failed ("+res.status+")"));
+  return data;
+}
+
+/* ==================================================================
+   LOGIN
+   ================================================================== */
+function renderGate(msg){
+  app.innerHTML = `
+    <div class="gate">
+      <div class="gate-card">
+        <div class="brand"><span class="logo"></span><span>Xperiia <span class="muted">/ Leads</span></span></div>
+        <h1>Niche Finder leads</h1>
+        <p>Enter your dashboard password to view everyone who has taken the quiz.</p>
+        <div class="field">
+          <label for="pw">Password</label>
+          <input class="in" id="pw" type="password" autocomplete="current-password" placeholder="Your dashboard password" />
+        </div>
+        <button class="btn btn-primary" id="enter">View leads</button>
+        <div class="gate-err" id="gerr">${msg?esc(msg):""}</div>
+      </div>
+    </div>`;
+  const pw=document.getElementById("pw"), btn=document.getElementById("enter"), err=document.getElementById("gerr");
+  pw.focus();
+  const go=async ()=>{
+    const val=pw.value.trim(); if(!val){ pw.focus(); return; }
+    btn.disabled=true; btn.textContent="Checking...";
+    try{
+      const data=await api({key:val});
+      KEY=val; sessionStorage.setItem(KEY_STORE,val);
+      LEADS=data.leads||[]; renderDash();
+    }catch(e){
+      err.textContent = e.message==="unauthorized" ? "That password is not right." : "Could not connect. Please try again.";
+      btn.disabled=false; btn.textContent="View leads";
+    }
+  };
+  btn.onclick=go;
+  pw.addEventListener("keydown",e=>{ if(e.key==="Enter") go(); });
+}
+
+/* ==================================================================
+   DASHBOARD
+   ================================================================== */
+function stats(){
+  const now=new Date(); const day=86400000;
+  const today=LEADS.filter(l=> (now - new Date(l.created_at)) < day && new Date(l.created_at).toDateString()===now.toDateString()).length;
+  const week=LEADS.filter(l=> (now - new Date(l.created_at)) < 7*day).length;
+  const matches=LEADS.map(l=>l.top_match).filter(n=>typeof n==="number");
+  const avg=matches.length? Math.round(matches.reduce((a,b)=>a+b,0)/matches.length):0;
+  return {total:LEADS.length, today, week, avg};
+}
+
+function renderDash(){
+  const s=stats();
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand"><span class="logo"></span><span>Xperiia <span class="muted">/ Niche Finder</span></span></div>
+      <div class="actions">
+        <button class="btn btn-sm" id="refresh">Refresh</button>
+        <button class="btn btn-sm" id="csv">Export CSV</button>
+        <button class="btn btn-ghost btn-sm" id="signout">Sign out</button>
+      </div>
+    </div>
+    <h2 class="page">Leads</h2>
+    <p class="sub">Everyone who completed the Niche Finder, newest first.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">${s.total}</div><div class="l">Total</div></div>
+      <div class="stat green"><div class="n">${s.today}</div><div class="l">Today</div></div>
+      <div class="stat"><div class="n">${s.week}</div><div class="l">Last 7 days</div></div>
+      <div class="stat"><div class="n">${s.avg}%</div><div class="l">Avg top match</div></div>
+    </div>
+    <div class="controls">
+      <div class="search">${iconSearch()}<input id="q" type="search" placeholder="Search name, email, handle or niche" value="${esc(FILTER)}" /></div>
+      <span class="count-tag" id="ctag"></span>
+    </div>
+    <div class="list" id="list"></div>`;
+
+  document.getElementById("refresh").onclick=reload;
+  document.getElementById("signout").onclick=signout;
+  document.getElementById("csv").onclick=exportCsv;
+  const q=document.getElementById("q");
+  q.addEventListener("input",()=>{ FILTER=q.value; renderList(); });
+  renderList();
+}
+
+function matchFilter(l){
+  if(!FILTER.trim()) return true;
+  const hay=[l.name,l.email,l.instagram,l.phone,l.top_niche,l.following,l.struggle].join(" ").toLowerCase();
+  return hay.includes(FILTER.trim().toLowerCase());
+}
+
+function renderList(){
+  const list=document.getElementById("list");
+  const ctag=document.getElementById("ctag");
+  const rows=LEADS.filter(matchFilter);
+  ctag.textContent = rows.length + (rows.length===1?" lead":" leads") + (FILTER.trim()?` of ${LEADS.length}`:"");
+  if(!LEADS.length){
+    list.innerHTML=`<div class="state"><div class="big">No leads yet</div><div>As soon as someone finishes the quiz, they show up here.</div></div>`;
+    return;
+  }
+  if(!rows.length){
+    list.innerHTML=`<div class="state"><div class="big">Nothing matches</div><div>Try a different search.</div></div>`;
+    return;
+  }
+  list.innerHTML = rows.map(cardHTML).join("");
+  list.querySelectorAll("[data-expand]").forEach(b=>{
+    b.onclick=()=> b.closest(".lead").classList.toggle("open");
+  });
+  list.querySelectorAll("[data-del]").forEach(b=>{
+    b.onclick=()=> delLead(b.getAttribute("data-del"), b.getAttribute("data-name"));
+  });
+}
+
+function cardHTML(l){
+  const ig = (l.instagram||"").replace(/^@/,"");
+  const wa = digits((l.dial_code||"")+(l.phone||""));
+  const niches = Array.isArray(l.top_niches)? l.top_niches : [];
+  const answers = Array.isArray(l.answers)? l.answers : [];
+
+  const contact = [];
+  if(l.email) contact.push(`<a class="chip" href="mailto:${esc(l.email)}">${iconMail()}${esc(l.email)}</a>`);
+  if(l.phone) contact.push(`<a class="chip" href="tel:${esc((l.dial_code||"")+l.phone)}">${iconPhone()}${esc((l.dial_code? l.dial_code+" ":"")+l.phone)}</a>`);
+  if(wa) contact.push(`<a class="chip" href="https://wa.me/${wa}" target="_blank" rel="noopener">${iconWa()}WhatsApp</a>`);
+  if(ig) contact.push(`<a class="chip" href="https://instagram.com/${esc(ig)}" target="_blank" rel="noopener">${iconIg()}@${esc(ig)}</a>`);
+
+  const meta=[];
+  if(l.following) meta.push(`<span class="tag"><span class="k">Following</span> ${esc(l.following)}</span>`);
+  if(l.struggle)  meta.push(`<span class="tag"><span class="k">Struggle</span> ${esc(l.struggle)}</span>`);
+
+  const ranks = niches.map(n=>`
+    <div class="rank-row">
+      <span class="rank-no">${esc(n.rank||"")}</span>
+      <span class="rank-name">${esc(n.name)}</span>
+      <span class="rank-track"><span class="rank-fill" style="width:${Math.max(4,Math.min(100,Number(n.match)||0))}%"></span></span>
+      <span class="rank-val">${esc(n.match)}%</span>
+    </div>`).join("");
+
+  const qas = answers.map(a=>`<div class="qa"><div class="q">${esc(a.q)}</div><div class="a">${esc(a.a)}</div></div>`).join("");
+
+  const badge = l.top_niche ? `<span class="niche-badge"><b>${esc(l.top_niche)}</b>${l.top_match?` · ${esc(l.top_match)}%`:""}</span>` : "";
+
+  return `
+  <div class="lead">
+    <div class="lead-head">
+      <div class="lead-id">
+        <div class="lead-name">${esc(l.name||"Unknown")}</div>
+        <div class="when">${esc(fmtDate(l.created_at))}</div>
+        <div class="contact">${contact.join("")}</div>
+        ${meta.length?`<div class="meta">${meta.join("")}</div>`:""}
+      </div>
+      <div>${badge}</div>
+    </div>
+    <div class="lead-foot">
+      <button class="expand-btn" data-expand>Full match + answers <span class="car">${iconCaret()}</span></button>
+      <button class="del" data-del="${esc(l.id)}" data-name="${esc(l.name||"")}">${iconTrash()} Delete</button>
+    </div>
+    <div class="detail">
+      ${ranks?`<h4>Top niche matches</h4>${ranks}`:""}
+      ${qas?`<h4>Quiz answers</h4>${qas}`:""}
+    </div>
+  </div>`;
+}
+
+/* ---- actions ---- */
+async function reload(){
+  try{ const data=await api({key:KEY}); LEADS=data.leads||[]; renderDash(); toast("Up to date"); }
+  catch(e){ if(e.message==="unauthorized"){ signout(); } else toast("Could not refresh"); }
+}
+function signout(){ sessionStorage.removeItem(KEY_STORE); KEY=""; LEADS=[]; FILTER=""; renderGate(); }
+
+async function delLead(id, name){
+  if(!confirm(`Delete the lead${name?` from ${name}`:""}? This cannot be undone.`)) return;
+  try{
+    await api({key:KEY, action:"delete", id});
+    LEADS=LEADS.filter(l=>l.id!==id);
+    renderDash(); toast("Lead deleted");
+  }catch(e){ toast("Delete failed"); }
+}
+
+function exportCsv(){
+  const rows=LEADS.filter(matchFilter);
+  if(!rows.length){ toast("Nothing to export"); return; }
+  const cols=["created_at","name","email","dial_code","phone","instagram","following","struggle","top_niche","top_match","consent"];
+  const head=["Date","Name","Email","Dial code","Phone","Instagram","Following","Struggle","Top niche","Top match %","Consent"];
+  const cell=(v)=>{ v=v==null?"":String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; };
+  const lines=[head.join(",")].concat(rows.map(r=> cols.map(c=> cell(c==="created_at"? fmtDate(r[c]) : r[c])).join(",")));
+  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  const stamp=new Date().toISOString().slice(0,10);
+  a.href=url; a.download=`xperiia-niche-leads-${stamp}.csv`; a.click();
+  URL.revokeObjectURL(url);
+  toast("CSV downloaded");
+}
+
+/* ---- inline icons ---- */
+function iconMail(){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>'; }
+function iconPhone(){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.4c.9.3 1.7.5 2.7.6a2 2 0 0 1 1.7 2Z"/></svg>'; }
+function iconWa(){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1 0 12 2Zm5.3 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1a9 9 0 0 1-3.2-1.9 9.5 9.5 0 0 1-2-2.6c-.4-.7-.4-1.2-.4-1.7 0-.5.4-1.1.7-1.3a.7.7 0 0 1 .5-.2h.4c.2 0 .3 0 .5.4l.6 1.5c.1.2 0 .4-.1.5l-.3.4c-.1.1-.2.3-.1.5a7 7 0 0 0 3 2.6c.3.1.4 0 .5-.1l.5-.6c.2-.2.3-.2.5-.1l1.4.7c.2.1.4.2.4.3.1.2.1.6 0 .9Z"/></svg>'; }
+function iconIg(){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>'; }
+function iconCaret(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>'; }
+function iconTrash(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2m-9 0 1 14h8l1-14"/></svg>'; }
+
+/* ==================================================================
+   BOOT
+   ================================================================== */
+async function boot(){
+  if(!KEY){ renderGate(); return; }
+  app.innerHTML=`<div class="state"><div class="spinner"></div>Loading your leads...</div>`;
+  try{
+    const data=await api({key:KEY});
+    LEADS=data.leads||[]; renderDash();
+  }catch(e){
+    if(e.message==="unauthorized"){ sessionStorage.removeItem(KEY_STORE); KEY=""; renderGate(); }
+    else renderGate("Could not connect. Please sign in again.");
+  }
+}
+boot();
+</script>
+</body>
+</html>

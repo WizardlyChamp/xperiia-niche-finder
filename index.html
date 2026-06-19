@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Niche Finder by Xperiia</title>
+<meta name="description" content="A short, honest finder that maps your interests, strengths and goals to three creator niches that actually fit you." />
+
+<!-- Fonts: Clash Display (headlines) + Satoshi (body). Loaded at runtime in the browser. -->
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,500,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   DESIGN TOKENS  (rebrand = edit these, nothing else)
+   ============================================================ */
+:root{
+  --paper:#F2EEE6;        /* warm page background */
+  --surface:#FBF9F4;      /* cards / inputs       */
+  --surface-2:#FFFFFF;    /* raised surface       */
+  --ink:#1A1813;          /* primary text         */
+  --ink-2:#56514A;        /* muted text           */
+  --ink-3:#8C857A;        /* faint labels         */
+  --line:rgba(26,24,19,.14);
+  --line-soft:rgba(26,24,19,.08);
+  --accent:#D8431D;       /* one accent: CTA + selected state */
+  --accent-press:#B5380F;
+  --on-accent:#FFF8F2;
+  --money:#1E6B4F;        /* data / earning meters */
+  --money-soft:rgba(30,107,79,.12);
+
+  --r-sm:10px;
+  --r-md:14px;
+  --r-lg:20px;
+  --pill:999px;
+
+  --shadow-sm:0 1px 2px rgba(26,24,19,.05);
+  --shadow-md:0 14px 36px -18px rgba(26,24,19,.30);
+  --shadow-lg:0 30px 70px -34px rgba(26,24,19,.42);
+
+  --font-display:"Clash Display","Space Grotesk",ui-sans-serif,system-ui,sans-serif;
+  --font-body:"Satoshi","Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  --ease:cubic-bezier(.4,0,.15,1);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.55;
+  font-size:16px;
+  letter-spacing:.002em;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  /* faint editorial grain so surfaces are not flat */
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, rgba(216,67,29,.05), transparent 60%),
+    radial-gradient(90% 60% at 110% 110%, rgba(30,107,79,.05), transparent 55%);
+  background-attachment:fixed;
+}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.04;letter-spacing:-.015em}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit;font-size:16px;color:inherit}
+::selection{background:rgba(216,67,29,.18)}
+
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ============================================================
+   SHELL
+   ============================================================ */
+.shell{
+  max-width:740px;
+  margin:0 auto;
+  padding:0 20px 64px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* header */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 2px 18px;
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(var(--paper) 72%, rgba(242,238,230,0));
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand .mark{
+  width:26px;height:26px;border-radius:8px;flex:none;
+  background:var(--ink);position:relative;
+}
+.brand .mark::before{
+  content:"";position:absolute;inset:7px;border-radius:3px;
+  background:var(--accent);
+}
+.brand .name{font-family:var(--font-display);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.brand .name b{color:var(--ink-3);font-weight:500}
+.step-count{
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:500;font-variant-numeric:tabular-nums;
+}
+
+/* progress line */
+.progress{
+  height:3px;background:var(--line-soft);border-radius:var(--pill);
+  overflow:hidden;margin:0 2px 30px;
+}
+.progress span{
+  display:block;height:100%;width:0;background:var(--accent);
+  border-radius:var(--pill);transition:width .5s var(--ease);
+}
+.progress.hidden{visibility:hidden}
+
+/* stage */
+.stage{flex:1;display:flex;flex-direction:column}
+.step-enter{animation:rise .42s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ============================================================
+   SHARED PIECES
+   ============================================================ */
+.eyebrow{
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);font-weight:600;margin-bottom:16px;
+  display:flex;align-items:center;gap:9px;
+}
+.eyebrow::before{content:"";width:18px;height:1.5px;background:var(--accent)}
+
+.q-title{font-size:clamp(27px,5.4vw,38px);margin-bottom:10px}
+.q-help{color:var(--ink-2);font-size:15.5px;max-width:48ch;margin-bottom:26px}
+
+/* option grid */
+.options{display:grid;gap:10px;margin-bottom:10px}
+.options.cols-2{grid-template-columns:1fr 1fr}
+.opt{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:var(--surface);border:1px solid var(--line);
+  padding:15px 16px;border-radius:var(--r-md);
+  transition:border-color .18s var(--ease),background .18s var(--ease),
+             transform .18s var(--ease),box-shadow .18s var(--ease);
+}
+.opt:hover{border-color:rgba(26,24,19,.30);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.opt .tick{
+  width:22px;height:22px;border-radius:7px;flex:none;
+  border:1.5px solid var(--line);background:var(--surface-2);
+  display:grid;place-items:center;transition:all .18s var(--ease);
+}
+.opt .tick svg{width:13px;height:13px;opacity:0;transform:scale(.6);transition:all .18s var(--ease);stroke:var(--on-accent)}
+.opt .label{font-size:15.5px;font-weight:500;line-height:1.35}
+.opt .label .sub{display:block;font-size:13px;color:var(--ink-3);font-weight:400;margin-top:2px}
+.opt[aria-pressed="true"]{
+  border-color:var(--accent);background:#FBEFE9;
+  box-shadow:0 0 0 1px var(--accent);
+}
+.opt[aria-pressed="true"] .tick{background:var(--accent);border-color:var(--accent)}
+.opt[aria-pressed="true"] .tick svg{opacity:1;transform:none}
+.opt[aria-pressed="true"] .label{color:var(--ink)}
+.opt.is-locked{opacity:.5;pointer-events:none}
+
+.field-note{
+  font-size:12.5px;color:var(--ink-3);min-height:18px;margin-top:4px;
+  transition:color .2s;
+}
+.field-note.warn{color:var(--accent)}
+
+/* nav row */
+.nav{display:flex;align-items:center;gap:14px;margin-top:26px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-weight:600;font-size:15.5px;border-radius:var(--pill);
+  padding:14px 26px;transition:all .18s var(--ease);
+  letter-spacing:.005em;
+}
+.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:var(--shadow-sm)}
+.btn-primary:hover{background:var(--accent-press);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.btn-primary:disabled{background:rgba(26,24,19,.14);color:var(--ink-3);box-shadow:none;transform:none;cursor:not-allowed}
+.btn-primary .arr{transition:transform .2s var(--ease)}
+.btn-primary:not(:disabled):hover .arr{transform:translateX(3px)}
+.btn-ghost{color:var(--ink-2);padding:14px 6px;font-weight:500}
+.btn-ghost:hover{color:var(--ink)}
+.nav .spacer{flex:1}
+
+/* ============================================================
+   INTRO
+   ============================================================ */
+.intro{padding-top:6px}
+.intro h1{font-size:clamp(38px,8.4vw,62px);letter-spacing:-.025em;margin-bottom:20px}
+.intro h1 .hl{color:var(--accent);font-style:normal;position:relative;white-space:nowrap}
+.intro .lede{font-size:clamp(16.5px,2.4vw,19px);color:var(--ink-2);max-width:46ch;margin-bottom:32px}
+.intro .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:38px}
+.intro .meta{font-size:13.5px;color:var(--ink-3);display:flex;align-items:center;gap:7px}
+.intro .meta .dot{width:5px;height:5px;border-radius:50%;background:var(--money)}
+.ticks{
+  display:grid;gap:1px;background:var(--line-soft);
+  border:1px solid var(--line-soft);border-radius:var(--r-md);overflow:hidden;
+}
+.tick-row{
+  display:flex;gap:13px;align-items:flex-start;
+  background:var(--surface);padding:16px 18px;
+}
+.tick-row .n{
+  font-family:var(--font-display);font-weight:600;font-size:14px;
+  color:var(--accent);flex:none;width:20px;font-variant-numeric:tabular-nums;
+}
+.tick-row .t{font-size:14.5px}
+.tick-row .t b{font-weight:600}
+.tick-row .t span{display:block;color:var(--ink-3);font-size:13px;margin-top:2px}
+
+/* ============================================================
+   DATA / INDUSTRY SCREEN
+   ============================================================ */
+.chart{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:22px 22px 20px;margin-bottom:22px;
+}
+.chart-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px}
+.chart-head h3{font-size:18px}
+.chart-head .scale{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.bar-row{display:grid;grid-template-columns:128px 1fr 40px;align-items:center;gap:12px;padding:6px 0}
+.bar-row .blabel{font-size:13.5px;font-weight:500;color:var(--ink)}
+.bar-row .btrack{height:11px;background:var(--line-soft);border-radius:var(--pill);overflow:hidden}
+.bar-row .bfill{
+  display:block;height:100%;width:0;border-radius:var(--pill);
+  background:linear-gradient(90deg,#2E8466,var(--money));
+  transition:width .9s var(--ease);
+}
+.bar-row.lo .bfill{background:linear-gradient(90deg,#9aa39c,#79837b)}
+.bar-row .bval{font-size:13px;font-weight:600;color:var(--money);text-align:right;font-variant-numeric:tabular-nums}
+.bar-row.lo .bval{color:var(--ink-3)}
+.chart-note{
+  font-size:13px;color:var(--ink-2);margin-top:16px;padding-top:15px;
+  border-top:1px solid var(--line-soft);line-height:1.5;
+}
+.chart-note b{color:var(--ink);font-weight:600}
+
+/* ============================================================
+   LEAD CAPTURE
+   ============================================================ */
+.form-grid{display:grid;gap:16px}
+.fg{display:flex;flex-direction:column;gap:7px}
+.fg.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label.lbl{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.005em}
+label.lbl .opt-tag{color:var(--ink-3);font-weight:400}
+.inp{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-sm);padding:13px 14px;width:100%;
+  transition:border-color .16s var(--ease),box-shadow .16s var(--ease);
+}
+.inp::placeholder{color:var(--ink-3)}
+.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(216,67,29,.12)}
+.inp.invalid{border-color:var(--accent);box-shadow:0 0 0 3px rgba(216,67,29,.10)}
+select.inp{appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%238C857A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:34px;cursor:pointer}
+.phone-wrap{display:grid;grid-template-columns:104px 1fr;gap:10px}
+.ig-wrap{position:relative}
+.ig-wrap .at{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-weight:500}
+.ig-wrap .inp{padding-left:28px}
+.err{font-size:12px;color:var(--accent);min-height:0;height:0;overflow:hidden;transition:height .2s,margin .2s}
+.err.show{height:auto;margin-top:1px}
+.consent{
+  display:flex;gap:11px;align-items:flex-start;
+  background:var(--surface);border:1px solid var(--line-soft);
+  border-radius:var(--r-md);padding:14px 15px;margin-top:2px;
+}
+.consent input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent);flex:none;cursor:pointer}
+.consent label{font-size:13px;color:var(--ink-2);line-height:1.45;cursor:pointer}
+.form-foot{font-size:12.5px;color:var(--ink-3);margin-top:14px;text-align:center}
+
+/* ============================================================
+   RESULTS
+   ============================================================ */
+.results-head{margin-bottom:6px}
+.results-head .eyebrow{color:var(--money)}
+.results-head .eyebrow::before{background:var(--money)}
+.results-head h2{font-size:clamp(26px,5.2vw,36px);margin-bottom:10px}
+.results-head p{color:var(--ink-2);font-size:15.5px;max-width:50ch;margin-bottom:26px}
+
+.niche{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:22px;margin-bottom:14px;
+  box-shadow:var(--shadow-sm);
+  animation:rise .5s var(--ease) both;
+}
+.niche.top{border-color:rgba(216,67,29,.45);box-shadow:0 0 0 1px rgba(216,67,29,.25),var(--shadow-md)}
+.niche-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.rank{
+  font-family:var(--font-display);font-weight:600;font-size:15px;
+  width:34px;height:34px;border-radius:10px;flex:none;
+  display:grid;place-items:center;background:var(--ink);color:var(--paper);
+}
+.niche.top .rank{background:var(--accent);color:var(--on-accent)}
+.niche-id{flex:1;min-width:0}
+.niche-id .pill-best{
+  display:inline-block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;color:var(--accent);background:#FBEFE9;
+  padding:3px 9px;border-radius:var(--pill);margin-bottom:7px;
+}
+.niche-id h3{font-size:21px;letter-spacing:-.01em;line-height:1.1}
+.niche-id .tag{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+.match{text-align:right;flex:none}
+.match .pct{font-family:var(--font-display);font-weight:600;font-size:25px;color:var(--money);font-variant-numeric:tabular-nums;line-height:1}
+.match .pl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+
+.niche-why{
+  font-size:14.5px;color:var(--ink);background:var(--surface-2);
+  border:1px solid var(--line-soft);border-radius:var(--r-md);
+  padding:13px 15px;margin-bottom:16px;line-height:1.5;
+}
+.niche-why b{font-weight:600}
+
+.stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:var(--r-md);overflow:hidden;margin-bottom:16px}
+.stat{background:var(--surface);padding:12px 13px}
+.stat .k{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
+.stat .v{font-size:14px;font-weight:600}
+.meter{display:flex;gap:3px;align-items:center}
+.meter i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.meter i.on{background:var(--money)}
+.comp-low{color:var(--money)}
+.comp-med{color:#B6831C}
+.comp-high{color:var(--accent)}
+
+.niche-sec{margin-bottom:14px}
+.niche-sec .h{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:9px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-size:12.5px;font-weight:500;background:var(--surface-2);border:1px solid var(--line);padding:5px 11px;border-radius:var(--pill);color:var(--ink-2)}
+.ideas{display:grid;gap:8px}
+.idea{display:flex;gap:10px;font-size:14px;color:var(--ink);align-items:flex-start;line-height:1.45}
+.idea .b{color:var(--accent);font-weight:700;flex:none;margin-top:1px}
+
+/* closing CTA */
+.close-cta{
+  background:var(--ink);color:var(--paper);border-radius:var(--r-lg);
+  padding:28px 26px;margin-top:24px;text-align:center;
+  box-shadow:var(--shadow-lg);
+}
+.close-cta .eyebrow{color:#F0A78F;justify-content:center}
+.close-cta .eyebrow::before{background:#F0A78F}
+.close-cta h3{color:var(--paper);font-size:clamp(22px,4.4vw,28px);margin-bottom:11px;letter-spacing:-.01em}
+.close-cta p{color:rgba(242,238,230,.74);font-size:15px;max-width:42ch;margin:0 auto 22px}
+.close-cta .btn-primary{background:var(--accent)}
+.close-cta .btn-primary:hover{background:var(--accent-press)}
+.restart{display:block;margin:18px auto 0;color:var(--ink-3);font-size:13.5px;font-weight:500}
+.restart:hover{color:var(--ink-2)}
+
+/* tiny utility */
+.center-wrap{display:flex;flex-direction:column;align-items:flex-start}
+@media (max-width:560px){
+  .options.cols-2{grid-template-columns:1fr}
+  .fg.row2{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:96px 1fr 36px;gap:9px}
+  .bar-row .blabel{font-size:12.5px}
+  .stat-strip{grid-template-columns:1fr 1fr}
+  .stat-strip .stat:last-child{grid-column:1/-1}
+  .topbar{padding-top:18px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .step-enter,.niche{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Xperiia home">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="name">Xperiia <b>/ Niche Finder</b></span>
+    </a>
+    <span class="step-count" id="stepCount" aria-hidden="true"></span>
+  </header>
+
+  <div class="progress hidden" id="progress" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <span id="progressBar"></span>
+  </div>
+
+  <main class="stage" id="stage" aria-live="polite"></main>
+</div>
+
+<script>
+/* ==================================================================
+   NICHE FINDER  ·  Xperiia
+   Architecture: data-driven. Add a question -> push to STEPS.
+   Add a niche -> push to NICHES with tag affinities. Scoring is generic.
+   ================================================================== */
+
+/* ---- backend: where leads are saved -----------------------------
+   Leads are saved to your Xperiia Supabase table (xperiia_niche_leads).
+   The key below is the PUBLIC anon key. It is safe to expose: the
+   table's security rules allow inserts only and block all reads, so
+   nobody can pull your leads with it. You read leads in the dashboard
+   (admin.html), which goes through a password-protected function. */
+const SUPABASE_URL = "https://nszoydpwmkslnhnsccox.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zem95ZHB3bWtzbG5obnNjY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczOTYyNzcsImV4cCI6MjA5Mjk3MjI3N30.q4B86xg62wlGPcMRo8EIT5i5bbD4pmbuB2x1b3Io9HU";
+
+/* ---- booking link for the final call to action ------------------
+   Paste your Calendly, WhatsApp or form link here. If left empty, the
+   button shows a short note instead of opening a link. */
+const BOOKING_URL = "";
+
+/* ------------------------------------------------------------------
+   1. NICHES  (the recommendation library)
+   tags drive matching. money = 1..5 earning-potential meter.
+   ------------------------------------------------------------------ */
+const NICHES = [
+  { id:"finance", name:"Personal Finance & Investing", tag:"Money made simple",
+    money:5, comp:"High", platforms:["YouTube","Instagram","LinkedIn"],
+    formats:["Explainer reels","Carousels","Long-form breakdowns"],
+    est:"Among the highest paid spaces in the creator economy. Brands and affiliate programs pay a premium for money audiences.",
+    hook:"Money topics keep people watching and keep advertisers paying, so consistency here compounds fast.",
+    ideas:["The money mistake I made in my early twenties","How an SIP actually grows, in 60 seconds","A real monthly budget, line by line"],
+    aff:{ t_finance:5, d_teach:3, d_analyze:3, s_research:2, m_business:2, m_full:2, f_oncamera:1, f_faceless:1 } },
+
+  { id:"realestate", name:"Real Estate & Property", tag:"High ticket, local trust",
+    money:5, comp:"Medium", platforms:["YouTube","Instagram"],
+    formats:["Property tours","Price breakdowns","Buyer guides"],
+    est:"One deal or referral can dwarf months of ad revenue. Strong for local leads and high value sponsorships.",
+    hook:"You do not need huge numbers here, a small engaged local audience can be worth a lot.",
+    ideas:["What your budget really buys in this city","First-home mistakes nobody warns you about","Honest home tour with the actual price"],
+    aff:{ t_realestate:5, d_teach:2, d_analyze:2, f_oncamera:1, m_business:2, m_full:1, s_speak:1 } },
+
+  { id:"business", name:"Business & Entrepreneurship", tag:"Build in public",
+    money:4, comp:"High", platforms:["LinkedIn","YouTube","Instagram"],
+    formats:["Story-led posts","Case studies","Talking-head clips"],
+    est:"Audiences with buying power and clear intent. Easy to route into your own offers, courses or services.",
+    hook:"You can sell your own thing here instead of waiting on brand deals, which is the fastest path to income.",
+    ideas:["How I landed my first ten clients","The pricing mistake quietly killing your margins","What no one tells you before going solo"],
+    aff:{ t_business:5, d_build:3, d_teach:2, d_inspire:2, m_business:3, m_full:2, f_oncamera:1, s_speak:1 } },
+
+  { id:"tech", name:"Tech & Gadget Reviews", tag:"Honest, useful, current",
+    money:4, comp:"High", platforms:["YouTube","Instagram","X"],
+    formats:["Review reels","Comparisons","Quick tips"],
+    est:"Steady affiliate income and a constant pipeline of brand seeding once you build trust.",
+    hook:"There is always a new launch to react to, so you rarely run out of things to make.",
+    ideas:["The budget phone beating flagships this year","Three apps that save me five hours a week","My honest take after thirty days of use"],
+    aff:{ t_tech:5, d_analyze:3, s_research:2, f_oncamera:2, d_teach:1, m_full:2, m_business:1 } },
+
+  { id:"education", name:"Education & Explainers", tag:"Make people smarter",
+    money:4, comp:"Medium", platforms:["YouTube","Instagram"],
+    formats:["Faceless voiceovers","Animated explainers","Fact reels"],
+    est:"High retention and shareability. Works fully faceless, which keeps production light and scalable.",
+    hook:"This works without ever showing your face, so you can grow on the strength of the ideas alone.",
+    ideas:["A piece of history you were never taught","How this everyday thing actually works","Sixty seconds of science that sticks"],
+    aff:{ t_education:5, d_teach:3, d_analyze:2, s_research:2, f_faceless:2, f_oncamera:1, m_full:2, m_business:1 } },
+
+  { id:"growth", name:"Self-Improvement & Productivity", tag:"Small wins, real change",
+    money:3, comp:"High", platforms:["Instagram","YouTube","X"],
+    formats:["Talking-head reels","Routine breakdowns","Carousels"],
+    est:"Loyal, repeat audiences. Strong fit for digital products, memberships and book or app deals.",
+    hook:"People come back daily for this, which builds the kind of loyal base that buys what you make.",
+    ideas:["My five a.m. routine, told honestly","How I actually cut my phone time","The two-minute rule that changed my week"],
+    aff:{ t_growth:5, d_inspire:3, d_teach:2, s_organize:1, m_full:2, m_business:1, f_oncamera:1, f_writing:1 } },
+
+  { id:"fitness", name:"Fitness & Body Transformation", tag:"Show the work",
+    money:3, comp:"High", platforms:["Instagram","YouTube","TikTok"],
+    formats:["Workout reels","What I eat","Progress edits"],
+    est:"Reliable demand from supplement, apparel and app brands, plus coaching and program sales.",
+    hook:"Your own progress is endless content, and results on camera build trust fast.",
+    ideas:["What I eat in a day to stay lean","A full home workout, no equipment","A ninety-day change, broken down"],
+    aff:{ t_fitness:5, d_inspire:3, d_teach:2, s_perform:1, f_oncamera:2, m_full:2, c_daily:1 } },
+
+  { id:"wellness", name:"Wellness & Mental Health", tag:"Calm in the scroll",
+    money:3, comp:"Medium", platforms:["Instagram","YouTube","Podcast"],
+    formats:["Soft talking reels","Journaling prompts","Audio"],
+    est:"Growing space with engaged communities. Fits wellness brands, apps and your own resources.",
+    hook:"This rewards honesty over polish, so you can start with very little and still connect.",
+    ideas:["How I handle anxiety day to day","Journaling prompts that actually help","A slow morning that resets the week"],
+    aff:{ t_wellness:5, d_connect:3, d_inspire:2, d_teach:1, f_oncamera:1, f_audio:1, m_creative:1, m_full:1 } },
+
+  { id:"fashion", name:"Fashion & Style", tag:"Looks people can copy",
+    money:3, comp:"High", platforms:["Instagram","Pinterest","TikTok"],
+    formats:["Styling reels","Lookbooks","Hauls"],
+    est:"Heavy brand and affiliate activity. Visual-first, so a strong eye matters more than talking.",
+    hook:"You can grow on visuals alone here, no script and no need to talk to camera.",
+    ideas:["One jacket styled five ways","Affordable outfits that read expensive","The capsule basics worth owning"],
+    aff:{ t_beauty:5, f_visual:3, s_design:1, d_inspire:1, f_oncamera:1, m_full:2, m_business:1 } },
+
+  { id:"beauty", name:"Beauty & Skincare", tag:"Routines that work",
+    money:3, comp:"High", platforms:["Instagram","YouTube","TikTok"],
+    formats:["Get ready with me","Routine reels","Dupes"],
+    est:"One of the most brand-funded categories. Trust and honesty convert into long term partnerships.",
+    hook:"Honest reviews build a loyal base, and beauty brands invest heavily in creators they trust.",
+    ideas:["My honest skincare routine, nothing skipped","Drugstore dupes that actually hold up","Getting ready for a real event"],
+    aff:{ t_beauty:5, f_oncamera:2, f_visual:2, d_teach:1, s_perform:1, m_full:2, m_business:1 } },
+
+  { id:"food", name:"Food & Recipes", tag:"Make me hungry",
+    money:3, comp:"Medium", platforms:["Instagram","YouTube","Pinterest"],
+    formats:["Recipe reels","Top-down cooking","Faceless cook-alongs"],
+    est:"Very shareable and saveable, which feeds reach. Works faceless with just your hands and a pan.",
+    hook:"Food travels far on saves and shares, and you only ever need to show your hands.",
+    ideas:["A fifteen-minute dinner you will actually make","Street food, done at home","One pan, one full meal"],
+    aff:{ t_food:5, f_visual:3, d_teach:1, s_design:1, f_faceless:1, m_full:1, m_business:1 } },
+
+  { id:"travel", name:"Travel & Adventure", tag:"Take me there",
+    money:3, comp:"Medium", platforms:["Instagram","YouTube"],
+    formats:["Destination reels","Itineraries","Cinematic edits"],
+    est:"Tourism boards, hotels and gear brands sponsor actively. Editing skill is your biggest edge.",
+    hook:"Strong edits stand out fast here, and good ones attract travel and gear partnerships.",
+    ideas:["A budget trip with the real costs shown","Spots most tourists completely miss","Forty-eight hours in one city"],
+    aff:{ t_travel:5, f_visual:3, d_inspire:2, s_edit:1, f_oncamera:1, m_full:1, m_creative:1 } },
+
+  { id:"gaming", name:"Gaming & Esports", tag:"Play with personality",
+    money:3, comp:"High", platforms:["YouTube","Twitch","Instagram"],
+    formats:["Highlight edits","Commentary","Tips clips"],
+    est:"Large, loyal audiences and steady demand from game and hardware brands. Personality is the moat.",
+    hook:"Your reactions and voice carry this, so being yourself on the mic is the whole job.",
+    ideas:["Ranked highlights with live commentary","The settings pros really use","Beginner mistakes costing you games"],
+    aff:{ t_gaming:5, f_oncamera:1, s_perform:2, d_entertain:3, s_edit:1, m_full:2, c_daily:1 } },
+
+  { id:"comedy", name:"Comedy & Relatable Skits", tag:"Make them screenshot it",
+    money:2, comp:"High", platforms:["Instagram","TikTok","YouTube Shorts"],
+    formats:["Skits","POV reels","Relatable clips"],
+    est:"Fastest reach of any niche, though pay per view is lower. Great for building a big audience quickly.",
+    hook:"Nothing spreads faster than a relatable laugh, which makes this the quickest way to scale reach.",
+    ideas:["POV, the office on a Monday","Things desi parents always say","Group chat moments everyone knows"],
+    aff:{ t_comedy:5, d_entertain:3, s_perform:3, f_oncamera:2, m_full:1, m_creative:1 } },
+
+  { id:"art", name:"Art, Design & Creative Process", tag:"Show how it is made",
+    money:3, comp:"Medium", platforms:["Instagram","Pinterest","YouTube"],
+    formats:["Timelapses","Process reels","Tutorials"],
+    est:"Strong for selling prints, commissions and templates directly, plus tool sponsorships.",
+    hook:"Your process is the product here, and you can sell your own work without relying on brands.",
+    ideas:["A piece from blank page to finished","My process, explained simply","A beginner-friendly technique to try"],
+    aff:{ t_art:5, f_visual:3, s_design:3, d_inspire:1, f_faceless:1, m_creative:2, m_side:1 } },
+
+  { id:"relationships", name:"Relationships & Dating", tag:"Say what people feel",
+    money:3, comp:"Medium", platforms:["Instagram","YouTube","Podcast"],
+    formats:["Talking reels","Story clips","Q and A"],
+    est:"Highly engaged and discussion-driven. Fits coaching, events and your own community offers.",
+    hook:"This sparks comments and shares like little else, and engagement is what every algorithm rewards.",
+    ideas:["Green flags people quietly ignore","How to actually communicate better","Dating advice I wish I had sooner"],
+    aff:{ t_relationships:5, d_connect:3, d_inspire:1, f_oncamera:1, s_speak:1, m_full:1, m_creative:1 } },
+
+  { id:"faceless", name:"Faceless Content (Cash-Cow Style)", tag:"Grow without the camera",
+    money:3, comp:"Medium", platforms:["YouTube","Instagram"],
+    formats:["Voiceover edits","Compilations","Text-on-screen"],
+    est:"Built for monetization and scale without ever appearing. Editing and research carry the whole channel.",
+    hook:"You never appear on camera, so editing and research are all it takes to grow and earn.",
+    ideas:["A top ten facts compilation","Motivational voiceover over clean edits","Curated ideas turned into short videos"],
+    aff:{ t_education:1, t_news:1, f_faceless:5, s_edit:2, s_research:1, m_side:2, m_business:2, m_full:1, d_analyze:1 } }
+];
+
+/* ------------------------------------------------------------------
+   2. INDUSTRY DATA  (earning-potential index, directional)
+   Reflects ad rates, affiliate value and sponsor demand, not a
+   guarantee of personal income. Shown to set expectations honestly.
+   ------------------------------------------------------------------ */
+const CHART = [
+  { label:"Finance",        v:96 },
+  { label:"Real Estate",    v:91 },
+  { label:"Business / B2B", v:88 },
+  { label:"Tech",           v:82 },
+  { label:"Education",      v:71 },
+  { label:"Wellness",       v:67 },
+  { label:"Fashion & Beauty", v:64 },
+  { label:"Fitness",        v:60 },
+  { label:"Food",           v:56 },
+  { label:"Travel",         v:53 },
+  { label:"Gaming",         v:49 },
+  { label:"Entertainment",  v:44 }
+];
+
+/* ------------------------------------------------------------------
+   3. QUESTIONS  (order = on-screen order)
+   kind: "single" | "multi" (multi uses max). tags = scoring votes.
+   ------------------------------------------------------------------ */
+const Q_PASSION = {
+  key:"passion", kind:"multi", max:3,
+  eyebrow:"What you are drawn to",
+  title:"What pulls your attention without anyone asking?",
+  help:"Pick up to three. Go with what you already read, watch or talk about, not what sounds impressive.",
+  options:[
+    { label:"Money & investing", tags:{t_finance:2} },
+    { label:"Tech & gadgets", tags:{t_tech:2} },
+    { label:"Business & startups", tags:{t_business:2} },
+    { label:"Self-growth & productivity", tags:{t_growth:2} },
+    { label:"Fitness & training", tags:{t_fitness:2} },
+    { label:"Health & wellness", tags:{t_wellness:2} },
+    { label:"Fashion & beauty", tags:{t_beauty:2} },
+    { label:"Food & cooking", tags:{t_food:2} },
+    { label:"Travel & places", tags:{t_travel:2} },
+    { label:"Gaming", tags:{t_gaming:2} },
+    { label:"Comedy & entertainment", tags:{t_comedy:2} },
+    { label:"Teaching & explaining", tags:{t_education:2} },
+    { label:"Art & design", tags:{t_art:2} },
+    { label:"Relationships & people", tags:{t_relationships:2} },
+    { label:"Real estate & homes", tags:{t_realestate:2} }
+  ]
+};
+
+const Q_STRENGTH = {
+  key:"strength", kind:"single",
+  eyebrow:"Your natural edge",
+  title:"Which of these feels most like you?",
+  help:"Everyone has one thing that comes easier than the rest. Pick that one.",
+  options:[
+    { label:"I can explain things clearly", tags:{s_speak:1, d_teach:2} },
+    { label:"I am comfortable on camera", sub:"Talking, performing, presenting", tags:{f_oncamera:2, s_perform:2} },
+    { label:"I have a strong eye for visuals", tags:{f_visual:2, s_design:2} },
+    { label:"I love researching and going deep", tags:{s_research:2, d_analyze:2} },
+    { label:"I am a good writer and storyteller", tags:{f_writing:2, s_write:2} },
+    { label:"I am great at editing things together", tags:{s_edit:2, f_faceless:1} }
+  ]
+};
+
+const Q_FORMAT = {
+  key:"format", kind:"single",
+  eyebrow:"How you want to show up",
+  title:"How do you actually want to create?",
+  help:"Be honest about this one. The wrong format is the fastest way to quit.",
+  options:[
+    { label:"Talking to camera, face shown", tags:{f_oncamera:3} },
+    { label:"Faceless, with voiceover or text", tags:{f_faceless:3} },
+    { label:"Mostly visual, little or no talking", tags:{f_visual:3} },
+    { label:"Writing-led, words first", tags:{f_writing:3} }
+  ]
+};
+
+const Q_AMBITION = {
+  key:"ambition", kind:"single",
+  eyebrow:"Your goal right now",
+  title:"How big is the money goal at this stage?",
+  help:"There is no wrong answer. It just changes which niches are worth your time.",
+  options:[
+    { label:"A creative outlet for now", sub:"Income can come later", tags:{m_creative:2} },
+    { label:"A solid side income", tags:{m_side:2} },
+    { label:"Going full-time as a creator", tags:{m_full:2} },
+    { label:"Building a brand or business behind it", tags:{m_business:2} }
+  ]
+};
+
+const Q_DRIVE = {
+  key:"drive", kind:"single",
+  eyebrow:"What actually moves you",
+  title:"Be honest, what would make a post feel worth it?",
+  help:"This is the emotional payoff that keeps you posting when views are low.",
+  options:[
+    { label:"Someone said it genuinely helped them", tags:{d_teach:2, d_connect:1} },
+    { label:"It made people laugh or feel something", tags:{d_entertain:2} },
+    { label:"It pushed someone to change something", tags:{d_inspire:2} },
+    { label:"Someone called it the clearest take they had seen", tags:{d_analyze:2} },
+    { label:"It started a real conversation", tags:{d_connect:2} },
+    { label:"It brought in a lead or a sale", tags:{d_build:2} }
+  ]
+};
+
+const Q_RESILIENCE = {
+  key:"resilience", kind:"single",
+  eyebrow:"How you handle the grind",
+  title:"Month one, low views, a few unkind comments. Your move?",
+  help:"Every creator hits this wall. Your instinct here says a lot about your fit.",
+  options:[
+    { label:"Study what is working and adjust", tags:{d_analyze:1, s_research:1, c_few:1} },
+    { label:"Keep going, the numbers come later", tags:{d_inspire:1, c_daily:1} },
+    { label:"Lean into the few who do engage", tags:{d_connect:1, c_few:1} },
+    { label:"Switch up the format and experiment", tags:{d_entertain:1, s_edit:1, c_few:1} }
+  ]
+};
+
+const Q_COMMIT = {
+  key:"commit", kind:"single",
+  eyebrow:"Your realistic pace",
+  title:"How much can you realistically post?",
+  help:"Pick what you can keep up for months, not what you can do in a motivated week.",
+  options:[
+    { label:"Every day, I am all in", tags:{c_daily:2, m_full:1} },
+    { label:"A few times a week", tags:{c_few:2} },
+    { label:"About once a week for now", tags:{c_weekly:2, m_side:1} }
+  ]
+};
+
+/* ------------------------------------------------------------------
+   4. STEP FLOW  (this is the whole journey)
+   ------------------------------------------------------------------ */
+const STEPS = [
+  { id:"intro" },
+  { id:"question", q:Q_PASSION },
+  { id:"question", q:Q_STRENGTH },
+  { id:"question", q:Q_FORMAT },
+  { id:"data",     q:Q_AMBITION },
+  { id:"question", q:Q_DRIVE },
+  { id:"question", q:Q_RESILIENCE },
+  { id:"question", q:Q_COMMIT },
+  { id:"capture" },
+  { id:"results" }
+];
+
+const DIAL_CODES = ["+91","+1","+44","+971","+61","+65","+49","+33","+92","+880","+977","+94","+60","+63","+234","+27"];
+
+/* ==================================================================
+   STATE
+   ================================================================== */
+const STATE = { step:0, answers:{}, lead:null, ranked:null };
+const $stage = document.getElementById("stage");
+const $progress = document.getElementById("progress");
+const $progressBar = document.getElementById("progressBar");
+const $stepCount = document.getElementById("stepCount");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* analytics hook (safe no-op if no GTM/GA present) */
+function track(event, data){
+  try{ window.dataLayer = window.dataLayer || []; window.dataLayer.push(Object.assign({event}, data||{})); }catch(e){}
+}
+
+/* steps that count toward the progress bar */
+const PROGRESS_IDS = new Set(["question","data","capture"]);
+function progressMeta(){
+  const total = STEPS.filter(s=>PROGRESS_IDS.has(s.id)).length;
+  let done = 0;
+  for(let i=0;i<=STATE.step && i<STEPS.length;i++){ if(PROGRESS_IDS.has(STEPS[i].id)) done++; }
+  return { done, total };
+}
+
+/* ==================================================================
+   SCORING ENGINE  (generic over config)
+   ================================================================== */
+function collectTags(){
+  const totals = {};
+  STEPS.forEach(s=>{
+    const q = s.q; if(!q) return;
+    const ans = STATE.answers[q.key]; if(ans==null) return;
+    const idxs = Array.isArray(ans) ? ans : [ans];
+    idxs.forEach(i=>{
+      const opt = q.options[i]; if(!opt) return;
+      for(const k in opt.tags){ totals[k] = (totals[k]||0) + opt.tags[k]; }
+    });
+  });
+  return totals;
+}
+function scoreNiches(){
+  const tags = collectTags();
+  const scored = NICHES.map(n=>{
+    let s = 0;
+    for(const k in n.aff){ if(tags[k]) s += tags[k] * n.aff[k]; }
+    return { niche:n, score:s };
+  }).sort((a,b)=> b.score - a.score);
+  return scored;
+}
+/* map raw scores to flattering, differentiated match percentages */
+function withPercent(ranked){
+  const top = ranked[0] ? ranked[0].score : 0;
+  return ranked.map(r=>{
+    const pct = top>0 ? Math.round(72 + (r.score/top)*24) : 80;
+    return Object.assign({}, r, { pct:Math.min(98, pct) });
+  });
+}
+
+/* a short, human "why this fits you" line built from their answers */
+function buildWhy(niche){
+  const fmt = STATE.answers.format;
+  const fmtLine = {
+    0:"You said you want to be on camera, which is exactly the edge this niche runs on.",
+    1:"You would rather stay faceless, and this works fully behind the scenes.",
+    2:"Your strength is visuals, and this is a visual-first space where that wins.",
+    3:"You are writing-led, and a strong point of view in words carries this niche."
+  }[fmt] || "";
+  return (fmtLine ? fmtLine + " " : "") + niche.hook;
+}
+
+/* ==================================================================
+   RENDERING
+   ================================================================== */
+function go(next){
+  if(next < 0 || next >= STEPS.length) return;
+  const dir = next > STATE.step ? 1 : -1;
+  const apply = ()=>{ STATE.step = next; render(); window.scrollTo({top:0, behavior: reduceMotion ? "auto":"smooth"}); };
+  if(reduceMotion){ apply(); return; }
+  $stage.style.transition = "opacity .16s ease, transform .16s ease";
+  $stage.style.opacity = "0";
+  $stage.style.transform = "translateY("+(8*dir)+"px)";
+  setTimeout(()=>{ $stage.style.transition=""; $stage.style.transform=""; apply(); }, 150);
+}
+
+function render(){
+  const step = STEPS[STATE.step];
+  // progress + counter
+  if(PROGRESS_IDS.has(step.id)){
+    const {done,total} = progressMeta();
+    $progress.classList.remove("hidden");
+    $progressBar.style.width = (done/total*100)+"%";
+    $progress.setAttribute("aria-valuenow", Math.round(done/total*100));
+    $stepCount.textContent = String(done).padStart(2,"0")+" / "+String(total).padStart(2,"0");
+  } else {
+    $progress.classList.add("hidden");
+    $stepCount.textContent = "";
+  }
+
+  let html = "";
+  if(step.id==="intro")      html = viewIntro();
+  else if(step.id==="question") html = viewQuestion(step.q);
+  else if(step.id==="data")     html = viewData(step.q);
+  else if(step.id==="capture")  html = viewCapture();
+  else if(step.id==="results")  html = viewResults();
+
+  $stage.innerHTML = "<div class='step-enter'>"+html+"</div>";
+  wire(step);
+  $stage.style.opacity = "1";
+}
+
+/* ---------- INTRO ---------- */
+function viewIntro(){
+  return `
+  <section class="intro">
+    <h1>Find the niche that <span class="hl">actually fits</span> you.</h1>
+    <p class="lede">Most creators quit because they picked a niche that looked good, not one that suited them. This finder maps what you love, what you are good at and how much you want to earn, then points you at three that make sense.</p>
+    <div class="cta-row">
+      <button class="btn btn-primary" id="startBtn">Start the finder <span class="arr">&rarr;</span></button>
+      <span class="meta"><span class="dot"></span>About 3 minutes, 7 short questions</span>
+    </div>
+    <div class="ticks">
+      <div class="tick-row"><span class="n">01</span><span class="t"><b>Built on real signals</b><span>Your interests, strengths and goals, not a personality gimmick.</span></span></div>
+      <div class="tick-row"><span class="n">02</span><span class="t"><b>Honest about money</b><span>You will see which spaces actually pay before you commit.</span></span></div>
+      <div class="tick-row"><span class="n">03</span><span class="t"><b>Three clear directions</b><span>With formats, ideas and where to post for each one.</span></span></div>
+    </div>
+  </section>`;
+}
+
+/* ---------- QUESTION (single + multi) ---------- */
+function viewQuestion(q){
+  return `
+  <section>
+    <div class="eyebrow">${q.eyebrow}</div>
+    <h2 class="q-title">${q.title}</h2>
+    <p class="q-help">${q.help}</p>
+    ${optionsHTML(q)}
+    <div class="field-note" id="note">${q.kind==="multi" ? "Choose up to "+q.max+"." : ""}</div>
+    <div class="nav">
+      <button class="btn-ghost" id="backBtn">&larr; Back</button>
+      <span class="spacer"></span>
+      <button class="btn btn-primary" id="nextBtn" disabled>Continue <span class="arr">&rarr;</span></button>
+    </div>
+  </section>`;
+}
+
+function optionsHTML(q){
+  const two = q.options.length > 6 ? "cols-2" : "";
+  const sel = STATE.answers[q.key];
+  const isSel = (i)=> q.kind==="multi" ? (Array.isArray(sel)&&sel.includes(i)) : sel===i;
+  const check = `<svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+  return `<div class="options ${two}" role="group">` + q.options.map((o,i)=>`
+    <button type="button" class="opt" data-i="${i}" aria-pressed="${isSel(i)?"true":"false"}">
+      <span class="tick" aria-hidden="true">${check}</span>
+      <span class="label">${o.label}${o.sub?`<span class="sub">${o.sub}</span>`:""}</span>
+    </button>`).join("") + `</div>`;
+}
+
+/* ---------- DATA SCREEN ---------- */
+function viewData(q){
+  const bars = CHART.map(c=>{
+    const lo = c.v < 62 ? "lo" : "";
+    return `<div class="bar-row ${lo}" data-v="${c.v}">
+      <span class="blabel">${c.label}</span>
+      <span class="btrack"><span class="bfill"></span></span>
+      <span class="bval">${c.v}</span>
+    </div>`;
+  }).join("");
+  return `
+  <section>
+    <div class="eyebrow">Before you choose</div>
+    <h2 class="q-title">Not every niche pays the same.</h2>
+    <p class="q-help">This is the earning potential of each space, based on ad rates, affiliate value and how much brands spend there. Higher is not better for everyone, but it is worth knowing.</p>
+    <div class="chart">
+      <div class="chart-head">
+        <h3>Earning potential by niche</h3>
+        <span class="scale">Index, 0 to 100</span>
+      </div>
+      ${bars}
+      <p class="chart-note"><b>The honest version:</b> audience size and consistency move your income more than the niche itself. A focused creator in a "lower" space out-earns a scattered one in finance every time.</p>
+    </div>
+    <h3 style="font-size:18px;margin-bottom:6px">${q.title}</h3>
+    <p class="q-help" style="margin-bottom:18px">${q.help}</p>
+    ${optionsHTML(q)}
+    <div class="field-note" id="note"></div>
+    <div class="nav">
+      <button class="btn-ghost" id="backBtn">&larr; Back</button>
+      <span class="spacer"></span>
+      <button class="btn btn-primary" id="nextBtn" disabled>Continue <span class="arr">&rarr;</span></button>
+    </div>
+  </section>`;
+}
+
+/* ---------- LEAD CAPTURE ---------- */
+function viewCapture(){
+  const codes = DIAL_CODES.map(c=>`<option value="${c}">${c}</option>`).join("");
+  return `
+  <section>
+    <div class="eyebrow">Almost there</div>
+    <h2 class="q-title">Where should we send your results?</h2>
+    <p class="q-help">Your three niches are ready. Add your details and we will show them now, plus send a copy and a few starter tips you can act on this week.</p>
+
+    <div class="form-grid">
+      <div class="fg">
+        <label class="lbl" for="f-name">Full name</label>
+        <input class="inp" id="f-name" type="text" autocomplete="name" placeholder="Your name" />
+        <div class="err" id="e-name">Please add your name.</div>
+      </div>
+
+      <div class="fg">
+        <label class="lbl" for="f-email">Email</label>
+        <input class="inp" id="f-email" type="email" autocomplete="email" placeholder="you@email.com" />
+        <div class="err" id="e-email">Please add a valid email.</div>
+      </div>
+
+      <div class="fg">
+        <label class="lbl" for="f-phone">Phone</label>
+        <div class="phone-wrap">
+          <select class="inp" id="f-code" aria-label="Country code">${codes}</select>
+          <input class="inp" id="f-phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="98765 43210" />
+        </div>
+        <div class="err" id="e-phone">Please add a valid phone number.</div>
+      </div>
+
+      <div class="fg">
+        <label class="lbl" for="f-ig">Instagram handle</label>
+        <div class="ig-wrap">
+          <span class="at">@</span>
+          <input class="inp" id="f-ig" type="text" autocomplete="off" placeholder="yourhandle" />
+        </div>
+        <div class="err" id="e-ig">Please add your Instagram handle.</div>
+      </div>
+
+      <div class="fg row2">
+        <div class="fg">
+          <label class="lbl" for="f-size">Current following</label>
+          <select class="inp" id="f-size">
+            <option value="">Select</option>
+            <option>Just starting (0 to 1k)</option>
+            <option>1k to 10k</option>
+            <option>10k to 50k</option>
+            <option>50k and above</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="lbl" for="f-goal">Biggest struggle</label>
+          <select class="inp" id="f-goal">
+            <option value="">Select</option>
+            <option>I do not know what to post</option>
+            <option>Staying consistent</option>
+            <option>Low reach and growth</option>
+            <option>Not turning it into money</option>
+            <option>Just getting started</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="consent">
+        <input type="checkbox" id="f-consent" />
+        <label for="f-consent">It is fine for Xperiia to contact me with my results and creator tips. No spam, and I can opt out any time.</label>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="btn-ghost" id="backBtn">&larr; Back</button>
+      <span class="spacer"></span>
+      <button class="btn btn-primary" id="submitBtn">Show my 3 niches <span class="arr">&rarr;</span></button>
+    </div>
+    <p class="form-foot">Your details stay private and are only used to send your results.</p>
+  </section>`;
+}
+
+/* ---------- RESULTS ---------- */
+function viewResults(){
+  const ranked = STATE.ranked.slice(0,3);
+  const name = (STATE.lead && STATE.lead.name) ? STATE.lead.name.split(" ")[0] : "there";
+  const cards = ranked.map((r,i)=>nicheCard(r,i)).join("");
+  return `
+  <section>
+    <div class="results-head">
+      <div class="eyebrow">Your matches are in</div>
+      <h2>Three niches built for you, ${escapeHTML(name)}.</h2>
+      <p>Ranked by how well they fit your interests, strengths and goals. Start with the first one. The other two are strong backups or ways to mix things up later.</p>
+    </div>
+    ${cards}
+    <div class="close-cta">
+      <div class="eyebrow">Want it done with you</div>
+      <h3>Turn your top niche into a 90-day plan.</h3>
+      <p>Xperiia builds the content calendar, hooks and growth system around the niche that fits you. The first strategy call is free.</p>
+      <button class="btn btn-primary" id="bookBtn">Book a free strategy call <span class="arr">&rarr;</span></button>
+      <a class="restart" id="restartBtn" href="#">Start over</a>
+    </div>
+  </section>`;
+}
+
+function nicheCard(r,i){
+  const n = r.niche;
+  const top = i===0;
+  const meter = Array.from({length:5}, (_,k)=>`<i class="${k<n.money?"on":""}"></i>`).join("");
+  const compClass = n.comp==="Low"?"comp-low":(n.comp==="Medium"?"comp-med":"comp-high");
+  const ideas = n.ideas.map(t=>`<div class="idea"><span class="b">+</span><span>${t}</span></div>`).join("");
+  const plats = n.platforms.map(p=>`<span class="chip">${p}</span>`).join("");
+  const forms = n.formats.map(f=>`<span class="chip">${f}</span>`).join("");
+  return `
+  <article class="niche ${top?"top":""}" style="animation-delay:${i*0.08}s">
+    <div class="niche-top">
+      <span class="rank">${i+1}</span>
+      <div class="niche-id">
+        ${top?`<span class="pill-best">Best fit</span>`:""}
+        <h3>${n.name}</h3>
+        <div class="tag">${n.tag}</div>
+      </div>
+      <div class="match">
+        <div class="pct">${r.pct}%</div>
+        <div class="pl">Match</div>
+      </div>
+    </div>
+
+    <div class="niche-why">${buildWhy(n)}</div>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="k">Earning potential</div><div class="v"><span class="meter">${meter}</span></div></div>
+      <div class="stat"><div class="k">Competition</div><div class="v ${compClass}">${n.comp}</div></div>
+      <div class="stat"><div class="k">Best platform</div><div class="v">${n.platforms[0]}</div></div>
+    </div>
+
+    <div class="niche-sec">
+      <div class="h">Why it pays</div>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.5">${n.est}</p>
+    </div>
+
+    <div class="niche-sec">
+      <div class="h">Formats that work</div>
+      <div class="chips">${forms}</div>
+    </div>
+
+    <div class="niche-sec">
+      <div class="h">Where to post</div>
+      <div class="chips">${plats}</div>
+    </div>
+
+    <div class="niche-sec" style="margin-bottom:0">
+      <div class="h">Three posts to start with</div>
+      <div class="ideas">${ideas}</div>
+    </div>
+  </article>`;
+}
+
+/* ==================================================================
+   WIRING (event handlers per step)
+   ================================================================== */
+function wire(step){
+  if(step.id==="intro"){
+    document.getElementById("startBtn").onclick = ()=>{ track("nf_start"); go(STATE.step+1); };
+    return;
+  }
+  if(step.id==="results"){
+    document.getElementById("bookBtn").onclick = ()=>{
+      track("nf_book_click", { topNiche: STATE.ranked[0].niche.id });
+      if(BOOKING_URL){
+        window.open(BOOKING_URL, "_blank", "noopener");
+      } else {
+        alert("Add your booking link (Calendly, WhatsApp or a form) to turn this into a live booking button. Your details and results are already saved.");
+      }
+    };
+    document.getElementById("restartBtn").onclick = (e)=>{ e.preventDefault(); STATE.answers={}; STATE.lead=null; STATE.ranked=null; go(0); };
+    return;
+  }
+
+  if(step.id==="data"){ animateBars(); }
+
+  const q = step.q;
+  if(q){ wireQuestion(q); return; }
+  if(step.id==="capture"){ wireCapture(); return; }
+}
+
+function animateBars(){
+  const rows = $stage.querySelectorAll(".bar-row");
+  requestAnimationFrame(()=> setTimeout(()=>{
+    rows.forEach((row,idx)=>{
+      const v = +row.dataset.v;
+      const fill = row.querySelector(".bfill");
+      if(!fill) return;
+      if(reduceMotion){ fill.style.width = v+"%"; return; }
+      setTimeout(()=>{ fill.style.width = v+"%"; }, idx*55);
+    });
+  }, 60));
+}
+
+function wireQuestion(q){
+  const note = document.getElementById("note");
+  const nextBtn = document.getElementById("nextBtn");
+  document.getElementById("backBtn").onclick = ()=> go(STATE.step-1);
+
+  const refresh = ()=>{
+    const sel = STATE.answers[q.key];
+    const ok = q.kind==="multi" ? (Array.isArray(sel)&&sel.length>0) : sel!=null;
+    nextBtn.disabled = !ok;
+  };
+  refresh();
+
+  $stage.querySelectorAll(".opt").forEach(btn=>{
+    btn.onclick = ()=>{
+      const i = +btn.dataset.i;
+      if(q.kind==="multi"){
+        let arr = Array.isArray(STATE.answers[q.key]) ? STATE.answers[q.key].slice() : [];
+        const at = arr.indexOf(i);
+        if(at>-1){ arr.splice(at,1); note.classList.remove("warn"); note.textContent="Choose up to "+q.max+"."; }
+        else{
+          if(arr.length>=q.max){
+            note.classList.add("warn"); note.textContent="That is the max of "+q.max+". Deselect one to swap.";
+            btn.animate?.([{transform:"translateX(0)"},{transform:"translateX(-3px)"},{transform:"translateX(3px)"},{transform:"translateX(0)"}],{duration:180});
+            return;
+          }
+          arr.push(i); note.classList.remove("warn");
+          note.textContent = arr.length>=q.max ? "Three picked. That is a good amount." : "Choose up to "+q.max+".";
+        }
+        STATE.answers[q.key] = arr;
+        btn.setAttribute("aria-pressed", arr.includes(i)?"true":"false");
+      } else {
+        STATE.answers[q.key] = i;
+        $stage.querySelectorAll(".opt").forEach(b=> b.setAttribute("aria-pressed", (+b.dataset.i===i)?"true":"false"));
+      }
+      refresh();
+    };
+  });
+
+  nextBtn.onclick = ()=>{
+    if(nextBtn.disabled) return;
+    track("nf_answer", { q:q.key });
+    go(STATE.step+1);
+  };
+}
+
+function wireCapture(){
+  document.getElementById("backBtn").onclick = ()=> go(STATE.step-1);
+  const submit = document.getElementById("submitBtn");
+
+  const fields = {
+    name: document.getElementById("f-name"),
+    email: document.getElementById("f-email"),
+    phone: document.getElementById("f-phone"),
+    code: document.getElementById("f-code"),
+    ig: document.getElementById("f-ig"),
+    size: document.getElementById("f-size"),
+    goal: document.getElementById("f-goal"),
+    consent: document.getElementById("f-consent")
+  };
+  // clear error on input
+  ["name","email","phone","ig"].forEach(k=>{
+    fields[k].addEventListener("input", ()=>{
+      fields[k].classList.remove("invalid");
+      document.getElementById("e-"+k).classList.remove("show");
+    });
+  });
+
+  const validEmail = (v)=> /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const validPhone = (v)=> v.replace(/\D/g,"").length>=6 && v.replace(/\D/g,"").length<=14;
+
+  submit.onclick = ()=>{
+    let ok = true;
+    const fail = (k)=>{ ok=false; fields[k].classList.add("invalid"); document.getElementById("e-"+k).classList.add("show"); };
+
+    if(!fields.name.value.trim()) fail("name");
+    if(!validEmail(fields.email.value.trim())) fail("email");
+    if(!validPhone(fields.phone.value)) fail("phone");
+    if(!fields.ig.value.trim()) fail("ig");
+    if(!fields.consent.checked){
+      fields.consent.parentElement.style.borderColor = "var(--accent)";
+      ok = false;
+    } else {
+      fields.consent.parentElement.style.borderColor = "";
+    }
+    if(!ok){
+      const firstBad = $stage.querySelector(".invalid") || (!fields.consent.checked ? fields.consent : null);
+      firstBad && firstBad.focus && firstBad.focus();
+      return;
+    }
+
+    // build the ranked list + lead payload
+    STATE.ranked = withPercent(scoreNiches());
+    const dialCode = fields.code.value;
+    const phoneRaw = fields.phone.value.replace(/\s+/g," ").trim();
+    const lead = {
+      name: fields.name.value.trim(),
+      email: fields.email.value.trim(),
+      dialCode: dialCode,
+      phone: phoneRaw,
+      phoneFull: dialCode + " " + phoneRaw,
+      instagram: "@" + fields.ig.value.trim().replace(/^@/,""),
+      following: fields.size.value || "Not specified",
+      struggle: fields.goal.value || "Not specified",
+      consent: !!fields.consent.checked,
+      answers: readableAnswers(),
+      topNiches: STATE.ranked.slice(0,3).map((r,i)=>({ rank:i+1, id:r.niche.id, name:r.niche.name, match:r.pct })),
+      submittedAt: new Date().toISOString()
+    };
+    STATE.lead = lead;
+    dispatchLead(lead);
+    track("nf_submit", { topNiche: lead.topNiches[0].id });
+    go(STATE.step+1);
+  };
+}
+
+/* Turn the stored answer indices into readable question/answer pairs
+   so the leads dashboard shows real text, not option numbers. */
+function readableAnswers(){
+  const out = [];
+  STEPS.forEach(s=>{
+    if(!s.q) return;
+    const q = s.q;
+    const val = STATE.answers[q.key];
+    if(val==null) return;
+    let text;
+    if(Array.isArray(val)){
+      text = val.map(i=> q.options[i] && q.options[i].label).filter(Boolean).join(", ");
+    } else {
+      text = q.options[val] ? q.options[val].label : "";
+    }
+    if(text) out.push({ q: q.title, a: text });
+  });
+  return out;
+}
+
+/* ==================================================================
+   LEAD DISPATCH
+   Saves the lead into the Xperiia Supabase table. The table accepts
+   inserts only, so the public key here cannot be used to read leads.
+   Always logs locally as a fallback if the network call fails.
+   ================================================================== */
+function dispatchLead(lead){
+  console.log("[Xperiia Niche Finder] new lead:", lead);
+  window.__nicheFinderLastLead = lead; // grab from console if needed
+
+  const row = {
+    name: lead.name,
+    email: lead.email,
+    dial_code: lead.dialCode,
+    phone: lead.phone,
+    instagram: lead.instagram,
+    following: lead.following,
+    struggle: lead.struggle,
+    consent: lead.consent,
+    top_niche: lead.topNiches[0] ? lead.topNiches[0].name : null,
+    top_match: lead.topNiches[0] ? lead.topNiches[0].match : null,
+    top_niches: lead.topNiches,
+    answers: lead.answers,
+    source: "niche-finder",
+    referrer: document.referrer || null,
+    user_agent: navigator.userAgent
+  };
+
+  try{
+    fetch(SUPABASE_URL + "/rest/v1/xperiia_niche_leads", {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(row)
+    }).then(r=>{
+      if(!r.ok){ r.text().then(t=> console.warn("Lead save failed:", r.status, t)); }
+    }).catch(err=> console.warn("Lead save error:", err));
+  }catch(e){ console.warn("Lead save exception:", e); }
+}
+
+/* small helper */
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+
+/* ==================================================================
+   INIT
+   ================================================================== */
+render();
+</script>
+</body>
+</html>
