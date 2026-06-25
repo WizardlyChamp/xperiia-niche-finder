@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Xperiia / CoreCue Leads</title>
+<title>Xperiia / Niche Finder Leads</title>
 <meta name="theme-color" content="#0A0E1A" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,11 +40,9 @@ body{
 }
 .wrap{max-width:1040px;margin:0 auto}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:18px}
-.cc-mark{width:30px;height:19px;flex:none}
-.cc-mark svg{width:30px;height:19px;display:block}
-.xp{font-weight:700;color:var(--ink)}
+.xp-logo{height:23px;width:auto;display:block;flex:none}
 .bsep{color:var(--line-2);font-weight:300;font-size:18px;margin:0 2px}
-.cc-word{font-weight:700;letter-spacing:-.012em;background:linear-gradient(100deg,#E5189A,#F47C20);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.brand .name{font-weight:700;color:var(--ink)}
 .brand .muted{color:var(--ink-3)}
 button{font-family:inherit;cursor:pointer}
 .btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--pill);padding:9px 16px;font-weight:600;font-size:14px;transition:.15s var(--ease)}
@@ -194,8 +192,8 @@ function renderGate(msg){
   app.innerHTML = `
     <div class="gate">
       <div class="gate-card">
-        <div class="brand"><span class="xp">Xperiia</span><span class="bsep">|</span><span class="cc-mark"><svg viewBox="0 0 40 24" fill="none" aria-hidden="true"><defs><linearGradient id="ccAdm1" x1="0" y1="12" x2="40" y2="12" gradientUnits="userSpaceOnUse"><stop stop-color="#E5189A"/><stop offset="1" stop-color="#F47C20"/></linearGradient></defs><circle cx="12" cy="12" r="7.5" stroke="url(#ccAdm1)" stroke-width="4.5"/><rect x="20" y="9.5" width="17" height="5" rx="2.5" fill="url(#ccAdm1)"/></svg></span><span class="cc-word">CoreCue</span></div>
-        <h1>CoreCue leads</h1>
+        <div class="brand"><img class="xp-logo" src="assets/xperiia-white.png" alt="Xperiia" /><span class="bsep">/</span><span class="name">Niche Finder</span></div>
+        <h1>Niche Finder leads</h1>
         <p>Enter your dashboard password to view everyone who has taken the quiz.</p>
         <div class="field">
           <label for="pw">Password</label>
@@ -239,7 +237,7 @@ function renderDash(){
   const s=stats();
   app.innerHTML = `
     <div class="topbar">
-      <div class="brand"><span class="xp">Xperiia</span><span class="bsep">|</span><span class="cc-mark"><svg viewBox="0 0 40 24" fill="none" aria-hidden="true"><defs><linearGradient id="ccAdm2" x1="0" y1="12" x2="40" y2="12" gradientUnits="userSpaceOnUse"><stop stop-color="#E5189A"/><stop offset="1" stop-color="#F47C20"/></linearGradient></defs><circle cx="12" cy="12" r="7.5" stroke="url(#ccAdm2)" stroke-width="4.5"/><rect x="20" y="9.5" width="17" height="5" rx="2.5" fill="url(#ccAdm2)"/></svg></span><span class="cc-word">CoreCue</span></div>
+      <div class="brand"><img class="xp-logo" src="assets/xperiia-white.png" alt="Xperiia" /><span class="bsep">/</span><span class="name">Niche Finder</span></div>
       <div class="actions">
         <button class="btn btn-sm" id="refresh">Refresh</button>
         <button class="btn btn-sm" id="csv">Export CSV</button>
@@ -247,7 +245,7 @@ function renderDash(){
       </div>
     </div>
     <h2 class="page">Leads</h2>
-    <p class="sub">Everyone who completed the CoreCue, newest first.</p>
+    <p class="sub">Everyone who completed the Niche Finder, newest first.</p>
     <div class="stats">
       <div class="stat"><div class="n">${s.total}</div><div class="l">Total</div></div>
       <div class="stat green"><div class="n">${s.today}</div><div class="l">Today</div></div>

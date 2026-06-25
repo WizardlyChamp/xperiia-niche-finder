@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CoreCue by Xperiia</title>
+<title>Niche Finder by Xperiia</title>
 <meta name="description" content="A short, honest finder that maps your interests, strengths and goals to three creator niches that actually fit you." />
 
 <meta name="theme-color" content="#0A0E1A" />
@@ -110,15 +110,11 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
   background:linear-gradient(var(--paper) 72%, rgba(10,14,26,0));
 }
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink)}
-.brand{gap:9px}
-.brand .xp{font-family:var(--font-display);font-weight:700;font-size:16.5px;letter-spacing:-.01em;color:var(--ink)}
+.brand{gap:11px}
+.xp-logo{height:26px;width:auto;display:block;flex:none}
 .brand .bsep{color:var(--line-2);font-weight:300;font-size:19px;line-height:1;margin:0 1px}
-.brand .cc{display:inline-flex;align-items:center;gap:7px}
-.brand .cc-mark{width:27px;height:17px;flex:none}
-.brand .cc-mark svg{width:27px;height:17px;display:block}
-.brand .cc-word{font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:-.012em;
-  background:linear-gradient(100deg,#E5189A,#F47C20);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-@media(max-width:480px){.brand .xp,.brand .cc-word{font-size:15px}.brand .cc-mark{width:23px}.brand .bsep{font-size:16px}}
+.brand .name{font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+@media(max-width:480px){.xp-logo{height:21px}.brand .name{font-size:15px}.brand .bsep{font-size:16px}}
 .step-count{
   font-size:12px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--ink-3);font-weight:500;font-variant-numeric:tabular-nums;
@@ -539,10 +535,10 @@ select.inp{appearance:none;-webkit-appearance:none;
 <body>
 <div class="shell">
   <header class="topbar">
-    <a class="brand" href="#" aria-label="CoreCue by Xperiia">
-      <span class="xp">Xperiia</span>
-      <span class="bsep" aria-hidden="true">|</span>
-      <span class="cc"><span class="cc-mark"><svg viewBox="0 0 40 24" fill="none" aria-hidden="true"><defs><linearGradient id="ccTop" x1="0" y1="12" x2="40" y2="12" gradientUnits="userSpaceOnUse"><stop stop-color="#E5189A"/><stop offset="1" stop-color="#F47C20"/></linearGradient></defs><circle cx="12" cy="12" r="7.5" stroke="url(#ccTop)" stroke-width="4.5"/><rect x="20" y="9.5" width="17" height="5" rx="2.5" fill="url(#ccTop)"/></svg></span><span class="cc-word">CoreCue</span></span>
+    <a class="brand" href="#" aria-label="Niche Finder by Xperiia">
+      <img class="xp-logo" src="assets/xperiia-white.png" alt="Xperiia" />
+      <span class="bsep" aria-hidden="true">/</span>
+      <span class="name">Niche Finder</span>
     </a>
     <span class="step-count" id="stepCount" aria-hidden="true"></span>
   </header>
@@ -558,16 +554,15 @@ select.inp{appearance:none;-webkit-appearance:none;
 .sitefoot{border-top:1px solid var(--line);margin-top:48px;padding:40px 24px 30px;background:linear-gradient(180deg,rgba(12,16,25,.2),rgba(10,14,26,.7))}
 .sf-inner{max-width:1120px;margin:0 auto}
 .sf-top{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-bottom:26px;border-bottom:1px solid var(--line-soft)}
-/* brand lockup: Xperiia logo  ·  CoreCue logo */
+/* brand lockup: Xperiia logo  ·  Niche Finder logo */
 .sf-lock{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .sf-brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#F3F5FA;font-weight:700;font-size:17px;letter-spacing:-.01em}
 .sf-mark{width:30px;height:30px;border-radius:8px;background:#0A0E1A;border:1px solid rgba(201,162,39,.32);display:grid;place-items:center;flex:none;box-shadow:0 0 16px rgba(201,162,39,.16)}
 .sf-mark svg{width:18px;height:18px;display:block}
 .sf-x{color:#3A4256;font-size:18px;font-weight:300}
 .sf-prod{display:inline-flex;align-items:center;gap:9px;color:#C6CCDB;font-weight:600;font-size:15px;text-decoration:none}
-.sf-prod .cc-mark{width:31px;height:19px;flex:none}
-.sf-prod .cc-mark svg{width:31px;height:19px;display:block}
-.sf-prod .cc-word{font-family:"Poppins",sans-serif;font-weight:700;font-size:16px;letter-spacing:-.012em;background:linear-gradient(100deg,#E5189A,#F47C20);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.xp-logo-foot{height:24px;width:auto;display:block}
+.sf-prod{font-family:"Poppins",sans-serif;font-weight:700;font-size:16px;letter-spacing:-.012em;color:#C6CCDB}
 .sf-prod:hover{color:#fff}
 .sf-links{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .sf-links a{color:#8A92A6;text-decoration:none;font-weight:500;font-size:14px;transition:color .15s}
@@ -582,11 +577,9 @@ select.inp{appearance:none;-webkit-appearance:none;
   <div class="sf-inner">
     <div class="sf-top">
       <div class="sf-lock">
-        <a class="sf-brand" href="https://xperiia.com" target="_blank" rel="noopener">Xperiia</a>
-        <span class="sf-x" aria-hidden="true">|</span>
-        <a class="sf-prod" href="#" id="sfHome">
-          <span class="cc-mark"><svg viewBox="0 0 40 24" fill="none" aria-hidden="true"><defs><linearGradient id="ccFoot" x1="0" y1="12" x2="40" y2="12" gradientUnits="userSpaceOnUse"><stop stop-color="#E5189A"/><stop offset="1" stop-color="#F47C20"/></linearGradient></defs><circle cx="12" cy="12" r="7.5" stroke="url(#ccFoot)" stroke-width="4.5"/><rect x="20" y="9.5" width="17" height="5" rx="2.5" fill="url(#ccFoot)"/></svg></span><span class="cc-word">CoreCue</span>
-        </a>
+        <a class="sf-brand" href="https://xperiia.com" target="_blank" rel="noopener"><img class="xp-logo-foot" src="assets/xperiia-white.png" alt="Xperiia" /></a>
+        <span class="sf-x" aria-hidden="true">/</span>
+        <a class="sf-prod" href="#" id="sfHome">Niche Finder</a>
       </div>
       <nav class="sf-links">
         <a class="lead" href="overview.html">Product overview</a>
@@ -1035,7 +1028,7 @@ function viewIntro(){
           <span class="lp-pill"><span class="pdot"></span>Free &middot; <b>~3 min</b> &middot; no login needed</span>
           <h1 class="lp-h1">Find the niche that <span class="hl">actually fits</span> you.</h1>
           <p class="lp-kicker">Built for creators into <span class="lp-cycle" id="lpCycle">Finance</span></p>
-          <p class="lp-lede">Most creators quit because they picked a niche that looked good, not one that suited them. CoreCue maps what you love, what you are good at and how much you want to earn &mdash; then points you at three that make sense.</p>
+          <p class="lp-lede">Most creators quit because they picked a niche that looked good, not one that suited them. Niche Finder maps what you love, what you are good at and how much you want to earn &mdash; then points you at three that make sense.</p>
           <div class="lp-cta">
             <button class="btn btn-primary btn-lg" id="startBtn">Start the finder <span class="arr">&rarr;</span></button>
             <a class="btn-line" id="howBtn" href="#how">See how it works</a>
@@ -1605,7 +1598,7 @@ function readableAnswers(){
    Always logs locally as a fallback if the network call fails.
    ================================================================== */
 function dispatchLead(lead){
-  console.log("[Xperiia CoreCue] new lead:", lead);
+  console.log("[Xperiia Niche Finder] new lead:", lead);
   window.__nicheFinderLastLead = lead; // grab from console if needed
 
   const row = {
