@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node renderp.js /tmp/final.pdf fn)",
+      "Bash(node -e ' *)",
+      "Bash(node renderp.js /tmp/final2.pdf fx)",
+      "Bash(node renderp.js /tmp/final3.pdf fz)",
+      "Bash(node renderp.js /tmp/css.pdf cs)",
+      "Bash(cat /tmp/dcss.log)",
+      "Bash(ls -la /tmp/css.pdf)",
+      "Bash(rm -f /tmp/css.pdf /tmp/dcss.log)",
+      "Bash(node drivecss.js \"/Users/abhaychadha/Projects/xperiia-niche-finder/overview.html\" /tmp/css.pdf)",
+      "Bash(echo \"relaunched pid $!\")",
+      "Bash(node renderp.js /tmp/ptest.pdf pt)",
+      "Bash(sleep 1)",
+      "Bash(cat /tmp/d760.log)",
+      "Bash(ls -la /tmp/c760.pdf)",
+      "Bash(node renderp.js /tmp/c760.pdf v)",
+      "Bash(node renderp.js /tmp/diag.pdf dg)",
+      "Bash(node renderp.js /tmp/fit.pdf ft)",
+      "Bash(node renderp.js /tmp/REAL.pdf r)",
+      "Bash(node /tmp/renderp.js /tmp/m40.pdf m40_)",
+      "Bash(node renderp.js /tmp/m40.pdf m40_)",
+      "Bash(node /tmp/renderp.js /tmp/WIDE.pdf w_)",
+      "Bash(node renderp.js /tmp/WIDE.pdf w_)",
+      "Bash(node renderp.js /tmp/ptest2.pdf q)",
+      "Bash(node renderp.js /tmp/overview_native.pdf n)",
+      "Bash(node renderp.js /tmp/ov2.pdf o)",
+      "Bash(python3 -c ' *)",
+      "Bash(awk '{print \"PDF size:\", $5, \"bytes\"}')",
+      "Bash(git check-ignore *)",
+      "Bash(git commit -q -m ' *)"
+    ]
+  }
+}
