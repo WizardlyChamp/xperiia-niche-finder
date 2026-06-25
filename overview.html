@@ -174,29 +174,29 @@ table.bench{width:100%;min-width:620px;border-collapse:collapse;font-size:13.5px
    ============================================================ */
 .print-head,.print-foot{display:none}
 @media print{
-  @page{ size:A4; margin:27mm 13mm 18mm; }
+  @page{ size:A4; margin:30mm 13mm 20mm; }
   html,body{background:#fff !important}
   body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .toolbar,.sitefoot{display:none !important}
   #doc{max-width:none;padding:0}
   .inner{max-width:none}
   /* running header + footer repeated on every page */
-  .print-head{display:flex;position:fixed;top:0;left:0;right:0;height:16mm;
-    align-items:center;justify-content:space-between;padding-top:7mm;
-    border-bottom:1.6px solid var(--gold);}
+  .print-head{display:flex;position:fixed;top:0;left:0;right:0;height:15mm;
+    align-items:flex-end;justify-content:space-between;padding-bottom:3mm;
+    border-bottom:1.6px solid var(--gold);background:#fff;}
   .print-head .ph-l{display:flex;align-items:center;gap:8px}
   .print-head .pm{width:18px;height:18px;border-radius:5px;background:#0A0E1A;display:grid;place-items:center;flex:none}
   .print-head .pm svg{width:11px;height:11px;display:block}
   .print-head .pn{font-family:var(--font-display);font-weight:600;font-size:12px;color:var(--ink)}
   .print-head .pn b{color:var(--ink-3);font-weight:500}
   .print-head .pr{font-size:8.5px;font-weight:700;letter-spacing:.14em;color:var(--gold)}
-  .print-foot{display:flex;position:fixed;bottom:0;left:0;right:0;height:11mm;
-    align-items:flex-end;justify-content:space-between;padding-bottom:6mm;
-    border-top:1px solid var(--line);color:var(--ink-3);font-size:8.5px}
+  .print-foot{display:flex;position:fixed;bottom:0;left:0;right:0;height:10mm;
+    align-items:flex-start;justify-content:space-between;padding-top:3mm;
+    border-top:1px solid var(--line);color:var(--ink-3);font-size:8.5px;background:#fff;}
   /* keep blocks intact across page breaks */
   .section{break-inside:auto}
   h2,h3,h4{break-after:avoid;page-break-after:avoid}
-  .fig,.card,.cards-2,.step,.steps,.pillar,.pillars,.demo,.summary-card,.tablewrap,table.bench,.bench tr,.usp-statement,.metarow{break-inside:avoid;page-break-inside:avoid}
+  .fig,.card,.step,.pillar,.bench tr{break-inside:avoid;page-break-inside:avoid}
   table.bench{width:100%;font-size:11px}
   .bench th,.bench td{padding:7px 8px}
   a{color:var(--ink)}
