@@ -208,30 +208,174 @@ input,select{font-family:inherit;font-size:16px;color:inherit}
 /* ============================================================
    INTRO
    ============================================================ */
-.intro{padding-top:6px}
-.intro h1{font-size:clamp(38px,8.4vw,62px);font-weight:800;letter-spacing:-.03em;margin-bottom:20px}
-.intro h1 .hl{font-style:normal;position:relative;white-space:nowrap;
-  background:linear-gradient(135deg,#F0D77E,#C9A227);-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;color:var(--gold)}
-.intro .lede{font-size:clamp(16.5px,2.4vw,19px);color:var(--ink-2);max-width:46ch;margin-bottom:32px}
-.intro .cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:38px}
-.intro .meta{font-size:13.5px;color:var(--ink-3);display:flex;align-items:center;gap:7px}
-.intro .meta .dot{width:5px;height:5px;border-radius:50%;background:var(--money)}
-.ticks{
-  display:grid;gap:1px;background:var(--line-soft);
-  border:1px solid var(--line-soft);border-radius:var(--r-md);overflow:hidden;
+/* ============================================================
+   LANDING PAGE  (full-bleed hero + sections)
+   Active only while body.landing is set (intro step).
+   ============================================================ */
+body.landing .shell{max-width:none;padding:0}
+body.landing .topbar{max-width:1120px;margin:0 auto;width:100%;padding:22px 24px 18px}
+body.landing #stage{display:block}
+
+.lp{display:block}
+.lp-inner{max-width:1120px;margin:0 auto;padding:0 24px}
+.lp-eyebrow{
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-2);font-weight:600;display:inline-flex;align-items:center;gap:9px;
 }
-.tick-row{
-  display:flex;gap:13px;align-items:flex-start;
-  background:var(--surface);padding:16px 18px;
+.lp-eyebrow::before{content:"";width:18px;height:1.5px;background:var(--gold-2)}
+
+/* ---- HERO ---- */
+.lp-hero{position:relative;overflow:hidden}
+.lp-hero::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 78% 18%, rgba(201,162,39,.16), transparent 60%),
+    radial-gradient(50% 45% at 8% 0%, rgba(40,60,110,.22), transparent 60%);
 }
-.tick-row .n{
-  font-family:var(--font-display);font-weight:600;font-size:14px;
-  color:var(--accent);flex:none;width:20px;font-variant-numeric:tabular-nums;
+.lp-hero .lp-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-top:48px;padding-bottom:72px}
+.lp-pill{
+  display:inline-flex;align-items:center;gap:9px;
+  background:var(--surface-2);border:1px solid var(--gold-line);
+  color:var(--ink-2);font-size:12.5px;font-weight:600;
+  padding:7px 14px;border-radius:var(--pill);margin-bottom:24px;
+  box-shadow:0 0 18px rgba(201,162,39,.10);
 }
-.tick-row .t{font-size:14.5px}
-.tick-row .t b{font-weight:600}
-.tick-row .t span{display:block;color:var(--ink-3);font-size:13px;margin-top:2px}
+.lp-pill .pdot{width:7px;height:7px;border-radius:50%;background:var(--money);box-shadow:0 0 10px var(--money)}
+.lp-pill b{color:var(--ink);font-weight:700}
+.lp-h1{font-size:clamp(38px,5.6vw,62px);font-weight:800;letter-spacing:-.032em;line-height:1.03;margin-bottom:18px}
+.lp-h1 .hl{
+  position:relative;white-space:nowrap;color:var(--gold);
+  background:linear-gradient(135deg,#F0D77E,#C9A227);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.lp-kicker{font-size:clamp(16px,2vw,18.5px);color:var(--ink-2);margin-bottom:14px;font-weight:500}
+.lp-cycle{
+  display:inline-block;color:var(--gold-2);font-weight:700;
+  min-width:7.5ch;transition:opacity .3s var(--ease),transform .3s var(--ease);
+}
+.lp-cycle.swap{opacity:0;transform:translateY(6px)}
+.lp-lede{font-size:clamp(15.5px,1.8vw,17px);color:var(--ink-2);max-width:48ch;margin-bottom:30px;line-height:1.6}
+.lp-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:34px}
+.btn-lg{padding:16px 30px;font-size:16px}
+.btn-line{
+  display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15.5px;
+  color:var(--ink);background:var(--surface-2);border:1px solid var(--line-2);
+  padding:15px 24px;border-radius:var(--pill);transition:all .18s var(--ease);
+}
+.btn-line:hover{border-color:var(--gold-line);background:var(--surface-3);transform:translateY(-1px)}
+.lp-stats{display:flex;flex-wrap:wrap;gap:26px}
+.lp-stat .v{font-family:var(--font-display);font-weight:700;font-size:26px;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.lp-stat .v .u{color:var(--gold-2)}
+.lp-stat .l{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-top:3px}
+
+/* ---- HERO PREVIEW CARD (interactive tilt) ---- */
+.lp-visual{position:relative;perspective:1200px;justify-self:center;width:100%;max-width:420px}
+.lp-glow{position:absolute;inset:-12% -8% -16% -8%;z-index:0;
+  background:radial-gradient(60% 60% at 50% 40%, rgba(201,162,39,.22), transparent 70%);
+  filter:blur(8px);pointer-events:none}
+.lp-pcard{
+  position:relative;z-index:1;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));
+  border:1px solid var(--gold-line);border-radius:var(--r-xl);
+  padding:22px;box-shadow:0 30px 70px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05);
+  transform-style:preserve-3d;transition:transform .2s var(--ease);will-change:transform;
+}
+.lp-pcard .pc-tag{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--gold-2);background:var(--gold-wash);border:1px solid var(--gold-line);padding:3px 9px;border-radius:var(--pill);display:inline-block;margin-bottom:12px}
+.lp-pcard .pc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;transform:translateZ(28px)}
+.lp-pcard .pc-name{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:-.01em;line-height:1.15}
+.lp-pcard .pc-sub{font-size:13px;color:var(--ink-3);margin-top:3px}
+.lp-pcard .pc-pct{font-family:var(--font-display);font-weight:700;font-size:30px;color:var(--money);line-height:1;font-variant-numeric:tabular-nums}
+.lp-pcard .pc-pl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);text-align:right;margin-top:2px}
+.lp-pcard .pc-bars{margin:18px 0 14px;display:grid;gap:9px;transform:translateZ(18px)}
+.pc-bar{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:10px}
+.pc-bar .bl{font-size:11.5px;color:var(--ink-2);font-weight:500}
+.pc-bar .bt{height:8px;background:var(--line-soft);border-radius:var(--pill);overflow:hidden}
+.pc-bar .bf{display:block;height:100%;width:0;border-radius:var(--pill);background:linear-gradient(90deg,#2E8466,var(--money));transition:width 1s var(--ease)}
+.pc-bar.gold .bf{background:linear-gradient(90deg,#F0D77E,var(--gold))}
+.lp-pcard .pc-chips{display:flex;flex-wrap:wrap;gap:6px;transform:translateZ(12px)}
+.pc-chip{font-size:11.5px;font-weight:500;background:var(--surface-3);border:1px solid var(--line);padding:4px 10px;border-radius:var(--pill);color:var(--ink-2)}
+.lp-float{
+  position:absolute;z-index:2;background:var(--surface-3);border:1px solid var(--gold-line);
+  border-radius:12px;padding:9px 13px;display:flex;align-items:center;gap:9px;
+  font-size:12.5px;font-weight:600;color:var(--ink);box-shadow:var(--shadow-md);
+  animation:floaty 4s ease-in-out infinite;
+}
+.lp-float .fi{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.lp-float.f1{top:-16px;right:18px}
+.lp-float.f2{bottom:-14px;left:-10px;animation-delay:-2s}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ---- SECTIONS ---- */
+.lp-section{position:relative;padding:64px 0;border-top:1px solid var(--line-soft)}
+.lp-section.alt{background:linear-gradient(180deg,rgba(255,255,255,.014),transparent)}
+.lp-sec-head{max-width:620px;margin-bottom:38px}
+.lp-sec-head h2{font-size:clamp(26px,3.6vw,40px);letter-spacing:-.025em;margin:14px 0 12px}
+.lp-sec-head p{color:var(--ink-2);font-size:16px;line-height:1.6}
+
+/* steps */
+.lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.lp-step{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:24px 22px;transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease);
+}
+.lp-step:hover{transform:translateY(-4px);border-color:var(--gold-line);box-shadow:0 18px 40px rgba(0,0,0,.4),0 0 24px rgba(201,162,39,.08)}
+.lp-step .sn{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:#0A0E1A;border:1px solid var(--gold-line);color:var(--gold-2);
+  font-family:var(--font-display);font-weight:700;font-size:17px;margin-bottom:16px;
+  box-shadow:0 0 18px rgba(201,162,39,.14);
+}
+.lp-step h3{font-size:18px;letter-spacing:-.01em;margin-bottom:8px}
+.lp-step p{color:var(--ink-2);font-size:14.5px;line-height:1.55}
+
+/* features */
+.lp-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:34px}
+.lp-feat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;transition:transform .2s var(--ease),border-color .2s var(--ease)}
+.lp-feat:hover{transform:translateY(-3px);border-color:var(--gold-line)}
+.lp-feat .fi{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--gold-wash);border:1px solid var(--gold-line);margin-bottom:14px}
+.lp-feat .fi svg{width:19px;height:19px;stroke:var(--gold-2)}
+.lp-feat h3{font-size:16.5px;margin-bottom:7px;letter-spacing:-.01em}
+.lp-feat p{color:var(--ink-2);font-size:14px;line-height:1.55}
+
+/* niche chip cloud */
+.lp-cloud{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
+.nchip{
+  font-size:13.5px;font-weight:500;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--line);
+  padding:8px 15px;border-radius:var(--pill);cursor:default;
+  transition:all .16s var(--ease);
+}
+.nchip:hover{color:var(--on-accent);background:var(--gold-grad);border-color:transparent;transform:translateY(-2px) scale(1.04);box-shadow:0 8px 20px rgba(201,162,39,.3)}
+
+/* closing band */
+.lp-band{
+  margin-top:8px;text-align:center;
+  background:radial-gradient(120% 120% at 50% 0%, rgba(201,162,39,.12), transparent 60%),linear-gradient(180deg,var(--surface-2),var(--surface));
+  border:1px solid var(--gold-line);border-radius:var(--r-xl);padding:42px 26px;
+  box-shadow:var(--shadow-lg);
+}
+.lp-band h2{font-size:clamp(24px,3.4vw,34px);letter-spacing:-.02em;margin-bottom:12px}
+.lp-band p{color:var(--ink-2);font-size:16px;max-width:46ch;margin:0 auto 24px}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:880px){
+  .lp-hero .lp-inner{grid-template-columns:1fr;gap:36px;padding-top:32px;padding-bottom:52px}
+  .lp-visual{order:-1;max-width:360px;margin:0 auto}
+  .lp-steps,.lp-feats{grid-template-columns:1fr}
+  .lp-section{padding:48px 0}
+}
+@media (max-width:560px){
+  body.landing .topbar{padding:18px 18px 14px}
+  .lp-inner{padding:0 18px}
+  .lp-stats{gap:18px 26px}
+  .lp-float{display:none}
+  .lp-visual{max-width:330px}
+  .lp-pcard{padding:18px}
+  .lp-pcard .pc-pct{font-size:26px}
+  .lp-pcard .pc-name{font-size:17px}
+}
 
 /* ============================================================
    DATA / INDUSTRY SCREEN
@@ -416,26 +560,50 @@ select.inp{appearance:none;-webkit-appearance:none;
 </div>
 
 <style>
-.sitefoot{border-top:1px solid var(--line);margin-top:44px;padding:26px 20px;background:rgba(12,16,25,.5)}
-.sf-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.sf-brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:#F3F5FA;font-weight:700;font-size:15px;font-family:"Poppins",ui-sans-serif,system-ui,sans-serif}
-.sf-mark{width:23px;height:23px;border-radius:6px;background:#0A0E1A;border:1px solid rgba(201,162,39,.32);display:grid;place-items:center;flex:none}
-.sf-mark svg{width:14px;height:14px;display:block}
-.sf-links{display:flex;align-items:center;gap:20px}
-.sf-links a{color:#8A92A6;text-decoration:none;font-weight:500;font-size:14px}
+.sitefoot{border-top:1px solid var(--line);margin-top:48px;padding:40px 24px 30px;background:linear-gradient(180deg,rgba(12,16,25,.2),rgba(10,14,26,.7))}
+.sf-inner{max-width:1120px;margin:0 auto}
+.sf-top{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-bottom:26px;border-bottom:1px solid var(--line-soft)}
+/* brand lockup: Xperiia logo  ·  Niche Finder logo */
+.sf-lock{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sf-brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#F3F5FA;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.sf-mark{width:30px;height:30px;border-radius:8px;background:#0A0E1A;border:1px solid rgba(201,162,39,.32);display:grid;place-items:center;flex:none;box-shadow:0 0 16px rgba(201,162,39,.16)}
+.sf-mark svg{width:18px;height:18px;display:block}
+.sf-x{color:#3A4256;font-size:18px;font-weight:300}
+.sf-prod{display:inline-flex;align-items:center;gap:9px;color:#C6CCDB;font-weight:600;font-size:15px;text-decoration:none}
+.sf-prod .pm{width:26px;height:26px;border-radius:7px;background:#0A0E1A;border:1px solid rgba(201,162,39,.28);display:grid;place-items:center;flex:none}
+.sf-prod .pm svg{width:15px;height:15px;display:block}
+.sf-prod:hover{color:#fff}
+.sf-links{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.sf-links a{color:#8A92A6;text-decoration:none;font-weight:500;font-size:14px;transition:color .15s}
 .sf-links a:hover{color:#C9A227}
 .sf-links a.lead::after{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#C9A227;margin-left:7px;vertical-align:middle;box-shadow:0 0 8px rgba(201,162,39,.6)}
+.sf-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:20px}
+.sf-prop{color:#8A92A6;font-size:13px;font-weight:500}
 .sf-cc{color:#5C6478;font-size:13px}
-@media (max-width:560px){.sf-inner{justify-content:center;text-align:center}.sf-cc{width:100%}}
+@media (max-width:600px){.sf-top{justify-content:center;text-align:center}.sf-lock,.sf-links{justify-content:center}.sf-bottom{justify-content:center;text-align:center}.sf-prop,.sf-cc{width:100%}}
 </style>
 <footer class="sitefoot">
   <div class="sf-inner">
-    <a class="sf-brand" href="https://xperiia.com" target="_blank" rel="noopener"><span class="sf-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M16.5 16.5L21 21"></path></svg></span>Xperiia</a>
-    <nav class="sf-links">
-      <a class="lead" href="overview.html">Product overview</a>
-      <a href="https://xperiia.com" target="_blank" rel="noopener">xperiia.com</a>
-    </nav>
-    <span class="sf-cc">&copy; 2026 Xperiia Digital AI LLP</span>
+    <div class="sf-top">
+      <div class="sf-lock">
+        <a class="sf-brand" href="https://xperiia.com" target="_blank" rel="noopener">
+          <span class="sf-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l14 16M19 4L5 20"/></svg></span>Xperiia
+        </a>
+        <span class="sf-x" aria-hidden="true">/</span>
+        <a class="sf-prod" href="#" id="sfHome">
+          <span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A227" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M11 7.5v7M7.5 11h7"/><path d="M16.5 16.5L21 21"/></svg></span>
+          Niche Finder
+        </a>
+      </div>
+      <nav class="sf-links">
+        <a class="lead" href="overview.html">Product overview</a>
+        <a href="https://xperiia.com" target="_blank" rel="noopener">xperiia.com</a>
+      </nav>
+    </div>
+    <div class="sf-bottom">
+      <span class="sf-prop">Property of Xperiia Digital AI LLP</span>
+      <span class="sf-cc">&copy; 2026 Xperiia Digital AI LLP &middot; All rights reserved</span>
+    </div>
   </div>
 </footer>
 
@@ -835,6 +1003,8 @@ function go(next){
 
 function render(){
   const step = STEPS[STATE.step];
+  teardownLanding();
+  document.body.classList.toggle("landing", step.id==="intro");
   // progress + counter
   if(PROGRESS_IDS.has(step.id)){
     const {done,total} = progressMeta();
@@ -859,22 +1029,111 @@ function render(){
   $stage.style.opacity = "1";
 }
 
-/* ---------- INTRO ---------- */
+/* ---------- LANDING (intro) ---------- */
 function viewIntro(){
+  const cloud = NICHES.map(n=>`<span class="nchip">${n.name.split(/[&(]/)[0].trim()}</span>`).join("");
   return `
-  <section class="intro">
-    <h1>Find the niche that <span class="hl">actually fits</span> you.</h1>
-    <p class="lede">Most creators quit because they picked a niche that looked good, not one that suited them. This finder maps what you love, what you are good at and how much you want to earn, then points you at three that make sense.</p>
-    <div class="cta-row">
-      <button class="btn btn-primary" id="startBtn">Start the finder <span class="arr">&rarr;</span></button>
-      <span class="meta"><span class="dot"></span>About 3 minutes, 7 short questions</span>
-    </div>
-    <div class="ticks">
-      <div class="tick-row"><span class="n">01</span><span class="t"><b>Built on real signals</b><span>Your interests, strengths and goals, not a personality gimmick.</span></span></div>
-      <div class="tick-row"><span class="n">02</span><span class="t"><b>Honest about money</b><span>You will see which spaces actually pay before you commit.</span></span></div>
-      <div class="tick-row"><span class="n">03</span><span class="t"><b>Three clear directions</b><span>With formats, ideas and where to post for each one.</span></span></div>
-    </div>
-  </section>`;
+  <div class="lp">
+
+    <!-- HERO -->
+    <section class="lp-hero">
+      <div class="lp-inner">
+        <div class="lp-hero-copy">
+          <span class="lp-pill"><span class="pdot"></span>Free &middot; <b>~3 min</b> &middot; no login needed</span>
+          <h1 class="lp-h1">Find the niche that <span class="hl">actually fits</span> you.</h1>
+          <p class="lp-kicker">Built for creators into <span class="lp-cycle" id="lpCycle">Finance</span></p>
+          <p class="lp-lede">Most creators quit because they picked a niche that looked good, not one that suited them. Niche Finder maps what you love, what you are good at and how much you want to earn &mdash; then points you at three that make sense.</p>
+          <div class="lp-cta">
+            <button class="btn btn-primary btn-lg" id="startBtn">Start the finder <span class="arr">&rarr;</span></button>
+            <a class="btn-line" id="howBtn" href="#how">See how it works</a>
+          </div>
+          <div class="lp-stats">
+            <div class="lp-stat"><div class="v" data-count="17">0</div><div class="l">Niches mapped</div></div>
+            <div class="lp-stat"><div class="v" data-count="7">0</div><div class="l">Signals read</div></div>
+            <div class="lp-stat"><div class="v" data-count="3">0</div><div class="l">Tailored matches</div></div>
+            <div class="lp-stat"><div class="v"><span class="u">~</span><span data-count="3">0</span> min</div><div class="l">Start to finish</div></div>
+          </div>
+        </div>
+
+        <div class="lp-visual" id="lpVisual">
+          <div class="lp-glow"></div>
+          <div class="lp-pcard" id="lpCard">
+            <span class="pc-tag">Best fit &middot; 94% match</span>
+            <div class="pc-top">
+              <div>
+                <div class="pc-name">Personal Finance<br>&amp; Investing</div>
+                <div class="pc-sub">Money made simple</div>
+              </div>
+              <div><div class="pc-pct">94%</div><div class="pc-pl">Match</div></div>
+            </div>
+            <div class="pc-bars">
+              <div class="pc-bar gold"><span class="bl">Interest</span><span class="bt"><span class="bf" data-w="92"></span></span></div>
+              <div class="pc-bar"><span class="bl">Earning</span><span class="bt"><span class="bf" data-w="96"></span></span></div>
+              <div class="pc-bar gold"><span class="bl">Strength</span><span class="bt"><span class="bf" data-w="84"></span></span></div>
+            </div>
+            <div class="pc-chips"><span class="pc-chip">YouTube</span><span class="pc-chip">Instagram</span><span class="pc-chip">Carousels</span></div>
+          </div>
+          <div class="lp-float f1"><span class="fi"></span>Matched to you</div>
+          <div class="lp-float f2"><span class="fi"></span>Honest on money</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="lp-section alt" id="how">
+      <div class="lp-inner">
+        <div class="lp-sec-head reveal">
+          <span class="lp-eyebrow">How it works</span>
+          <h2>Three minutes to real clarity.</h2>
+          <p>No personality gimmicks. Just a few honest questions, a quick reality check on money, and three directions that actually suit you.</p>
+        </div>
+        <div class="lp-steps">
+          <div class="lp-step reveal"><div class="sn">1</div><h3>Answer 7 quick questions</h3><p>Your interests, your natural edge, how you want to show up and how big the money goal is right now.</p></div>
+          <div class="lp-step reveal"><div class="sn">2</div><h3>See which niches pay</h3><p>A straight look at earning potential across spaces &mdash; based on ad rates, affiliate value and brand spend.</p></div>
+          <div class="lp-step reveal"><div class="sn">3</div><h3>Get your top 3 matches</h3><p>Ranked niches with a match score, formats that work, where to post and three posts to start with.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT YOU GET + NICHES -->
+    <section class="lp-section">
+      <div class="lp-inner">
+        <div class="lp-sec-head reveal">
+          <span class="lp-eyebrow">Why it works</span>
+          <h2>Picked on signal, not vibes.</h2>
+          <p>Every result is built from what you tell us &mdash; weighted across interest, strength, format and goal &mdash; so the niches you get are ones you can actually keep going in.</p>
+        </div>
+        <div class="lp-feats">
+          <div class="lp-feat reveal">
+            <div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+            <h3>Built on real signals</h3><p>Your interests, strengths and goals drive the match &mdash; not a horoscope.</p>
+          </div>
+          <div class="lp-feat reveal">
+            <div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <h3>Honest about money</h3><p>You see which spaces actually pay before you commit a single post.</p>
+          </div>
+          <div class="lp-feat reveal">
+            <div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <h3>Three clear directions</h3><p>With formats, post ideas and the right platform for each one.</p>
+          </div>
+        </div>
+
+        <div class="lp-sec-head reveal" style="margin-top:46px;margin-bottom:18px">
+          <span class="lp-eyebrow">17 niches mapped</span>
+          <h2 style="font-size:clamp(22px,2.8vw,30px)">From finance to faceless.</h2>
+        </div>
+        <div class="lp-cloud reveal">${cloud}</div>
+
+        <div class="lp-band reveal" style="margin-top:48px">
+          <span class="lp-eyebrow" style="justify-content:center">Ready when you are</span>
+          <h2 style="margin-top:14px">Find the niche that fits you.</h2>
+          <p>Seven short questions. Three matches built around you. About three minutes.</p>
+          <button class="btn btn-primary btn-lg" id="startBtn2">Start the finder <span class="arr">&rarr;</span></button>
+        </div>
+      </div>
+    </section>
+
+  </div>`;
 }
 
 /* ---------- QUESTION (single + multi) ---------- */
@@ -1100,10 +1359,7 @@ function nicheCard(r,i){
    WIRING (event handlers per step)
    ================================================================== */
 function wire(step){
-  if(step.id==="intro"){
-    document.getElementById("startBtn").onclick = ()=>{ track("nf_start"); go(STATE.step+1); };
-    return;
-  }
+  if(step.id==="intro"){ wireLanding(); return; }
   if(step.id==="results"){
     document.getElementById("bookBtn").onclick = ()=>{
       track("nf_book_click", { topNiche: STATE.ranked[0].niche.id });
@@ -1122,6 +1378,83 @@ function wire(step){
   const q = step.q;
   if(q){ wireQuestion(q); return; }
   if(step.id==="capture"){ wireCapture(); return; }
+}
+
+/* ==================================================================
+   LANDING INTERACTIVITY  (cycling word, tilt, counters, reveal)
+   ================================================================== */
+const LP = { timers:[], observers:[], tilt:null };
+function teardownLanding(){
+  LP.timers.forEach(clearInterval); LP.timers=[];
+  LP.observers.forEach(o=>o.disconnect()); LP.observers=[];
+  if(LP.tilt){ window.removeEventListener("mousemove", LP.tilt); LP.tilt=null; }
+}
+
+function wireLanding(){
+  const start = ()=>{ track("nf_start"); go(STATE.step+1); };
+  const b1 = document.getElementById("startBtn"); if(b1) b1.onclick = start;
+  const b2 = document.getElementById("startBtn2"); if(b2) b2.onclick = start;
+  const how = document.getElementById("howBtn");
+  if(how) how.onclick = (e)=>{ e.preventDefault(); const t=document.getElementById("how"); t && t.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"}); };
+
+  // cycling niche word in the hero kicker
+  const cyc = document.getElementById("lpCycle");
+  if(cyc && !reduceMotion){
+    const words = ["Finance","Fitness","Tech","Beauty","Travel","Gaming","Food","Business","Education","Wellness"];
+    let i = 0;
+    const id = setInterval(()=>{
+      if(!document.body.contains(cyc)){ clearInterval(id); return; }
+      i = (i+1) % words.length;
+      cyc.classList.add("swap");
+      setTimeout(()=>{ cyc.textContent = words[i]; cyc.classList.remove("swap"); }, 300);
+    }, 1900);
+    LP.timers.push(id);
+  }
+
+  // count-up stats
+  document.querySelectorAll(".lp-stat .v [data-count], .lp-stat .v[data-count]").forEach(el=>{
+    const target = +el.getAttribute("data-count"); if(!target) return;
+    if(reduceMotion){ el.textContent = target; return; }
+    let cur = 0; const steps = 28, inc = target/steps;
+    const id = setInterval(()=>{
+      cur += inc;
+      if(cur >= target){ cur = target; clearInterval(id); }
+      el.textContent = Math.round(cur);
+    }, 26);
+    LP.timers.push(id);
+  });
+
+  // interactive parallax tilt on the hero preview card
+  const visual = document.getElementById("lpVisual");
+  const card = document.getElementById("lpCard");
+  if(visual && card && !reduceMotion && window.matchMedia("(pointer:fine)").matches){
+    const move = (e)=>{
+      const r = visual.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - .5;
+      const py = (e.clientY - r.top)/r.height - .5;
+      const dist = Math.hypot(px, py);
+      const f = dist < 1.1 ? 1 : 0;            // ease off when far away
+      card.style.transform = `rotateY(${px*12*f}deg) rotateX(${-py*12*f}deg) translateZ(0)`;
+    };
+    window.addEventListener("mousemove", move, {passive:true});
+    LP.tilt = move;
+  }
+
+  // animate preview-card bars + scroll reveal
+  const fillBars = ()=> $stage.querySelectorAll(".pc-bar .bf").forEach((bf,k)=>{
+    setTimeout(()=>{ bf.style.width = (bf.dataset.w||0)+"%"; }, 240 + k*120);
+  });
+  if(reduceMotion){
+    $stage.querySelectorAll(".pc-bar .bf").forEach(bf=> bf.style.width=(bf.dataset.w||0)+"%");
+    $stage.querySelectorAll(".reveal").forEach(el=> el.classList.add("in"));
+  } else {
+    requestAnimationFrame(fillBars);
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } });
+    }, { threshold:.16, rootMargin:"0px 0px -8% 0px" });
+    $stage.querySelectorAll(".reveal").forEach(el=> io.observe(el));
+    LP.observers.push(io);
+  }
 }
 
 function animateBars(){
@@ -1322,6 +1655,12 @@ function escapeHTML(s){ return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","
 /* ==================================================================
    INIT
    ================================================================== */
+const $sfHome = document.getElementById("sfHome");
+if($sfHome) $sfHome.onclick = (e)=>{
+  e.preventDefault();
+  if(STATE.step!==0){ go(0); }
+  else window.scrollTo({top:0, behavior: reduceMotion ? "auto":"smooth"});
+};
 render();
 </script>
 </body>
